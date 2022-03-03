@@ -4,7 +4,7 @@ from typing import Tuple
 
 from crome_synthesis.controller.exceptions import SynthesisTimeout, UnknownStrixResponse
 from crome_synthesis.controller.tools import strix_syntax_fix
-from crome_synthesis.specification.string_logic import implies_
+from crome_logic.specification.string_logic import implies_
 
 
 def generate_controller(

@@ -1,7 +1,7 @@
 import spot
 
 from crome_synthesis.controller.synthesis import generate_controller
-from crome_synthesis.tools.io import save_to_file
+from crome_logic.tools.io import save_to_file
 
 
 def example_1() -> None:
@@ -12,13 +12,15 @@ def example_1() -> None:
 
     realizable1, controller1, time1 = generate_controller(a1, g1, i1, o1)
 
-    print(controller1)
+    print(f"\n\n{controller1}")
     file_path = save_to_file(controller1, "controller_1")
 
     automaton = spot.automaton(file_path)
     dotfile = automaton.to_str(format="dot")
+    print(f"\n\n{dotfile}")
 
-    print(dotfile)
+    lbtt = automaton.to_str(format="lbtt")
+    print(f"\n\n{lbtt}")
 
     a2: str = "G(F(a2))"
     g2: str = "G(a2 -> b2)"
@@ -27,7 +29,7 @@ def example_1() -> None:
 
     realizable2, controller2, time2 = generate_controller(a2, g2, i2, o2)
 
-    print(controller2)
+    print(f"\n\n{controller2}")
 
 
 if __name__ == "__main__":

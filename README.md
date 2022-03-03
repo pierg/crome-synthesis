@@ -15,6 +15,14 @@ manage the environment and some dependencies.
 
 We use [poetry](https://github.com/python-poetry/poetry) to manage the dependencies.
 
+
+
+First install the dependency crome-logic from git
+```bash
+git subtree add --prefix=crome-logic https://github.com/pierg/crome-logic.git main --squash
+```
+
+
 Create the environment using conda:
 
 ```bash
@@ -32,6 +40,7 @@ Install the dependencies with poetry:
 ```bash
 poetry install
 ```
+
 
 ## Example
 

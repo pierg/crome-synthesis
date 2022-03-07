@@ -28,7 +28,6 @@ def and_(propositions: List[str], brackets: bool = False) -> str:
 
         if "FALSE" in propositions:
             return "FALSE"
-
         """Remove all TRUE elements"""
         propositions = list(filter("TRUE".__ne__, propositions))
         if len(propositions) == 0:

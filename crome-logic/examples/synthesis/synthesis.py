@@ -1,5 +1,4 @@
 import spot
-
 from crome_logic.controller.synthesis import generate_controller
 from crome_logic.tools.io import save_to_file
 

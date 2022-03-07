@@ -2,9 +2,8 @@ import hashlib
 from typing import Any
 
 import spot
-from treelib import Tree
-
 from crome_logic.specification.string_logic import general_logic
+from treelib import Tree
 
 
 def gen_ltl_tree(spot_f, tree: Tree | None = None, parent=None) -> Tree:
@@ -27,9 +26,9 @@ def gen_ltl_tree(spot_f, tree: Tree | None = None, parent=None) -> Tree:
     return tree
 
 
-def gen_atoms_tree(
-    spot_f: spot.formula | str, tree: Tree | None = None, parent=None
-) -> Tree:
+def gen_atoms_tree(spot_f: spot.formula | str,
+                   tree: Tree | None = None,
+                   parent=None) -> Tree:
     if isinstance(spot_f, str):
         spot_f = spot.formula(spot_f)
     if tree is None:
@@ -42,7 +41,8 @@ def gen_atoms_tree(
         if spot_f.kindstr() in ["ap", "tt", "ff"]:
             hash_ = ltl_string
         else:
-            hash_ = f"a{hashlib.sha1(ltl_string.encode('utf-8')).hexdigest()}"[0:5]
+            hash_ = f"a{hashlib.sha1(ltl_string.encode('utf-8')).hexdigest()}"[
+                0:5]
 
     tag = spot_f.kindstr() if hash_ == "" else hash_
     node = tree.create_node(
@@ -55,16 +55,18 @@ def gen_atoms_tree(
     )
 
     if spot_f.size() > 0 and spot_f.kindstr() not in [
-        "G",
-        "F",
-        "X",
-        "U",
-        "ap",
-        "tt",
-        "ff",
+            "G",
+            "F",
+            "X",
+            "U",
+            "ap",
+            "tt",
+            "ff",
     ]:
         for subformula in spot_f:
-            gen_atoms_tree(spot_f=subformula, tree=tree, parent=node.identifier)
+            gen_atoms_tree(spot_f=subformula,
+                           tree=tree,
+                           parent=node.identifier)
 
     return tree
 

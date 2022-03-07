@@ -4,6 +4,7 @@ from crome_logic.typesimple import CromeType
 
 
 class Boolean(CromeType):
+
     def __init__(
         self,
         name: str,

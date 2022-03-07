@@ -31,7 +31,8 @@ def transform_spot_tree(formula: spot.formula):
 
 
 def count_sugar(formula: spot.formula, n_sugar: int = 0) -> int:
-    if formula._is(spot.op_G) or formula._is(spot.op_F) or formula._is(spot.op_X):
+    if formula._is(spot.op_G) or formula._is(spot.op_F) or formula._is(
+            spot.op_X):
         for subformula in formula:
             return count_sugar(formula=subformula, n_sugar=n_sugar + 1)
 

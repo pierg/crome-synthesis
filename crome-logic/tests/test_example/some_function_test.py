@@ -1,5 +1,4 @@
 import pytest
-
 from crome_logic.example import some_function
 
 

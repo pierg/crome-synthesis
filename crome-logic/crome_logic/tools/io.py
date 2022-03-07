@@ -3,8 +3,7 @@ import os
 from pathlib import Path
 
 output_folder = os.path.abspath(
-    os.path.join(os.path.dirname(__file__), "..", "..", "output")
-)
+    os.path.join(os.path.dirname(__file__), "..", "..", "output"))
 
 
 def save_to_file(
@@ -34,7 +33,8 @@ def save_to_file(
 
     file_path: Path = Path(f"{file_folder}/{file_name}")
 
-    with open(file_path, "w") as f:  # mypy crashes on this line, i don't know why
+    with open(file_path,
+              "w") as f:  # mypy crashes on this line, i don't know why
         f.write(file_content)
 
     f.close()

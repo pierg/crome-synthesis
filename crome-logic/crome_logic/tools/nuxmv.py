@@ -6,11 +6,11 @@ from pathlib import Path
 from typing import List
 
 from bloom_filter import BloomFilter
-
-import docker
 from crome_logic.specification.string_logic import not_
 from crome_logic.specification.tools import is_false_string, is_true_string
 from crome_logic.tools.string_manipulation import add_spaces_spot_ltl
+
+import docker
 
 bloom_sat: BloomFilter = BloomFilter(max_elements=10000, error_rate=0.1)
 bloom_val: BloomFilter = BloomFilter(max_elements=10000, error_rate=0.1)
@@ -22,8 +22,7 @@ class CheckType(Enum):
 
 
 output_folder = os.path.abspath(
-    os.path.join(os.path.dirname(__file__), "..", "..", "..", "output")
-)
+    os.path.join(os.path.dirname(__file__), "..", "..", "..", "output"))
 nusmvfilename = "nusmvfile.smv"
 output_file = f"{output_folder}/{nusmvfilename}"
 
@@ -129,8 +128,8 @@ def _launch_nuxmv() -> List[str]:
     try:
         """ "Trying nuXmv locally."""
         output = subprocess.check_output(
-            ["nuXmv", file_path], encoding="UTF-8", stderr=subprocess.DEVNULL
-        ).splitlines()
+            ["nuXmv", file_path], encoding="UTF-8",
+            stderr=subprocess.DEVNULL).splitlines()
 
     except Exception:
         """ "Trying nuXmv with docker."""
@@ -139,14 +138,17 @@ def _launch_nuxmv() -> List[str]:
         output = str(
             client.containers.run(
                 image=docker_image,
-                volumes={f"{folder_path}": {"bind": "/home/", "mode": "rw"}},
+                volumes={f"{folder_path}": {
+                    "bind": "/home/",
+                    "mode": "rw"
+                }},
                 command=f"nuXmv /home/{nusmvfilename}",
                 remove=True,
-            )
-        ).split("\\n")
+            )).split("\\n")
 
     output = [
-        x for x in output if not (x[:3] == "***" or x[:7] == "WARNING" or x == "")
+        x for x in output
+        if not (x[:3] == "***" or x[:7] == "WARNING" or x == "")
     ]
     # print("nuXmv has terminated!")
     return output

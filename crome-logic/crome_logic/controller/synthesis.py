@@ -2,14 +2,14 @@ import subprocess
 import time
 from typing import Tuple
 
-from crome_logic.controller.exceptions import SynthesisTimeout, UnknownStrixResponse
+from crome_logic.controller.exceptions import (SynthesisTimeout,
+                                               UnknownStrixResponse)
 from crome_logic.controller.tools import strix_syntax_fix
 from crome_logic.specification.string_logic import implies_
 
 
-def generate_controller(
-    assumptions: str, guarantees: str, ins: str, outs: str
-) -> Tuple[bool, str, float]:
+def generate_controller(assumptions: str, guarantees: str, ins: str,
+                        outs: str) -> Tuple[bool, str, float]:
     """It returns:
     bool: indicating if a contorller has been synthetised
     str: mealy machine of the controller (if found) or of the counter-examples if not found in dot format
@@ -17,7 +17,6 @@ def generate_controller(
 
     command: str = ""
     timeout: int = -1
-
     """Fix syntax"""
     assumptions = strix_syntax_fix(assumptions)
     guarantees = strix_syntax_fix(guarantees)
@@ -36,9 +35,10 @@ def generate_controller(
         print(f"RUNNING COMMAND:\n{command}")
         start_time = time.time()
 
-        result = subprocess.check_output(
-            [command], shell=True, timeout=timeout, encoding="UTF-8"
-        ).splitlines()
+        result = subprocess.check_output([command],
+                                         shell=True,
+                                         timeout=timeout,
+                                         encoding="UTF-8").splitlines()
 
     except subprocess.TimeoutExpired:
         raise SynthesisTimeout(command=command, timeout=timeout)

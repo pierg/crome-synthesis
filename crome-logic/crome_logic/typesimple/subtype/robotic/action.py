@@ -4,6 +4,7 @@ from crome_logic.typesimple.subtype.base.bounded_integer import BoundedInteger
 
 
 class IntegerAction(BoundedInteger):
+
     def __init__(self, name: str, min_value=0, max_value=50):
         super().__init__(
             name,
@@ -14,5 +15,6 @@ class IntegerAction(BoundedInteger):
 
 
 class BooleanAction(Boolean):
+
     def __init__(self, name: str, mutex: str = ""):
         super().__init__(name, kind=CromeType.Kind.ACTION, mutex_group=mutex)

@@ -3,12 +3,12 @@ from __future__ import annotations
 from abc import ABC, abstractmethod
 
 from aenum import Enum, auto, skip
-from treelib import Tree
-
 from crome_logic.typeset import Typeset
+from treelib import Tree
 
 
 class Specification(ABC):
+
     class Kind(Enum):
         UNDEFINED = auto()
 

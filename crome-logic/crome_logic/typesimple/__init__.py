@@ -31,7 +31,8 @@ class CromeType(ABC):
         return isinstance(self, type(other))
 
     def __eq__(self, other):
-        if self.name == other.name and type(self).__name__ == type(other).__name__:
+        if self.name == other.name and type(self).__name__ == type(
+                other).__name__:
             return True
         return False
 
@@ -48,11 +49,9 @@ class CromeType(ABC):
 
     @property
     def controllable(self) -> bool:
-        if (
-            self._kind == CromeType.Kind.SENSOR
-            or self._kind == CromeType.Kind.CONTEXT
-            or self._kind == CromeType.Kind.ACTIVE
-        ):
+        if (self._kind == CromeType.Kind.SENSOR
+                or self._kind == CromeType.Kind.CONTEXT
+                or self._kind == CromeType.Kind.ACTIVE):
             return False
         return True
 

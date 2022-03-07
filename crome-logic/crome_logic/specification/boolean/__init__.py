@@ -2,10 +2,6 @@ from __future__ import annotations
 
 from copy import deepcopy
 
-from pyeda.boolalg.expr import AndOp, Expression, OrOp, expr
-from pyeda.boolalg.minimization import espresso_exprs
-from treelib import Tree
-
 from crome_logic.specification import Specification
 from crome_logic.specification.boolean.tools import dot_to_spot_string
 from crome_logic.specification.string_logic import and_, or_
@@ -13,9 +9,13 @@ from crome_logic.specification.trees import gen_atoms_tree
 from crome_logic.tools.atomic_propositions import extract_ap
 from crome_logic.typeset import Typeset
 from crome_logic.typesimple.subtype.base.boolean import Boolean
+from pyeda.boolalg.expr import AndOp, Expression, OrOp, expr
+from pyeda.boolalg.minimization import espresso_exprs
+from treelib import Tree
 
 
 class Bool(Specification):
+
     def __init__(
         self,
         formula: str | Expression,
@@ -33,16 +33,16 @@ class Bool(Specification):
         else:
             raise AttributeError
 
-        super().__init__(
-            dot_to_spot_string(self._pyeda_expression.to_dot()), self._typeset
-        )
+        super().__init__(dot_to_spot_string(self._pyeda_expression.to_dot()),
+                         self._typeset)
 
     def __hash__(self: Bool):
         return hash(str(self))
 
-    def _init__boolean_formula(
-        self, formula: str, typeset: Typeset | None, tree: None | Tree = None
-    ):
+    def _init__boolean_formula(self,
+                               formula: str,
+                               typeset: Typeset | None,
+                               tree: None | Tree = None):
         if typeset is None:
             set_ap_str = extract_ap(formula)
             set_ap = set(map(lambda x: Boolean(x), set_ap_str))
@@ -85,30 +85,32 @@ class Bool(Specification):
 
     def minimize(self):
         """Espresso minimization works only for DNF forms and it's slow."""
-        if not (
-            str(self._pyeda_expression) == "1" or str(self._pyeda_expression) == "0"
-        ):
+        if not (str(self._pyeda_expression) == "1"
+                or str(self._pyeda_expression) == "0"):
             print("start dnf")
             self._pyeda_expression = self._pyeda_expression.to_dnf()
             print("end dnf")
-            if not (
-                str(self._pyeda_expression) == "1" or str(self._pyeda_expression) == "0"
-            ):
+            if not (str(self._pyeda_expression) == "1"
+                    or str(self._pyeda_expression) == "0"):
                 print("start espresso")
-                self._pyeda_expression = espresso_exprs(self._pyeda_expression)[0]
+                self._pyeda_expression = espresso_exprs(
+                    self._pyeda_expression)[0]
                 print("end espresso")
 
     def represent(
-        self, output_type: Bool.OutputStr = Specification.OutputStr.DEFAULT
+            self,
+            output_type: Bool.OutputStr = Specification.OutputStr.DEFAULT
     ) -> str:
         if output_type == Specification.OutputStr.DEFAULT:
             return dot_to_spot_string(self._pyeda_expression.to_dot())
         elif output_type == Specification.OutputStr.CNF:
-            return " & ".join([or_([str(e) for e in elem]) for elem in self.cnf()])
+            return " & ".join(
+                [or_([str(e) for e in elem]) for elem in self.cnf()])
         elif output_type == Specification.OutputStr.DNF:
-            return " | ".join(
-                [and_([str(e) for e in elem], brackets=True) for elem in self.dnf()]
-            )
+            return " | ".join([
+                and_([str(e) for e in elem], brackets=True)
+                for elem in self.dnf()
+            ])
         else:
             raise NotImplementedError
 
@@ -121,20 +123,25 @@ class Bool(Specification):
                 if isinstance(clause, OrOp):
                     for atom in clause.xs:
                         atoms.add(
-                            Bool(atom, typeset=self.typeset.get_sub_typeset(str(atom)))
-                        )
+                            Bool(atom,
+                                 typeset=self.typeset.get_sub_typeset(
+                                     str(atom))))
                 else:
                     atoms.add(
-                        Bool(clause, typeset=self.typeset.get_sub_typeset(str(clause)))
-                    )
+                        Bool(clause,
+                             typeset=self.typeset.get_sub_typeset(
+                                 str(clause))))
                 cnf_list.append(atoms)
         elif isinstance(cnf, OrOp):
             atoms = set()
             for atom in cnf.xs:
-                atoms.add(Bool(atom, typeset=self.typeset.get_sub_typeset(str(atom))))
+                atoms.add(
+                    Bool(atom,
+                         typeset=self.typeset.get_sub_typeset(str(atom))))
             cnf_list.append(atoms)
         else:
-            cnf_list.append({Bool(cnf, typeset=self.typeset.get_sub_typeset(str(cnf)))})
+            cnf_list.append(
+                {Bool(cnf, typeset=self.typeset.get_sub_typeset(str(cnf)))})
         return cnf_list
 
     def dnf(self) -> list[set[Bool]]:  # type: ignore
@@ -146,33 +153,36 @@ class Bool(Specification):
                 if isinstance(clause, AndOp):
                     for atom in clause.xs:
                         atoms.add(
-                            Bool(atom, typeset=self.typeset.get_sub_typeset(str(atom)))
-                        )
+                            Bool(atom,
+                                 typeset=self.typeset.get_sub_typeset(
+                                     str(atom))))
                 else:
                     atoms.add(
-                        Bool(clause, typeset=self.typeset.get_sub_typeset(str(clause)))
-                    )
+                        Bool(clause,
+                             typeset=self.typeset.get_sub_typeset(
+                                 str(clause))))
                 dnf_list.append(atoms)
         elif isinstance(dnf, AndOp):
             atoms = set()
             for atom in dnf.xs:
-                atoms.add(Bool(atom, typeset=self.typeset.get_sub_typeset(str(atom))))
+                atoms.add(
+                    Bool(atom,
+                         typeset=self.typeset.get_sub_typeset(str(atom))))
             dnf_list.append(atoms)
         else:
-            dnf_list.append({Bool(dnf, typeset=self.typeset.get_sub_typeset(str(dnf)))})
+            dnf_list.append(
+                {Bool(dnf, typeset=self.typeset.get_sub_typeset(str(dnf)))})
         return dnf_list
 
     def __and__(self: Bool, other: Bool) -> Bool:
         """self & other Returns a new Pyeda with the conjunction with other."""
-        return Bool(
-            self.expression & other.expression, typeset=self.typeset + other.typeset
-        )
+        return Bool(self.expression & other.expression,
+                    typeset=self.typeset + other.typeset)
 
     def __or__(self: Bool, other: Bool) -> Bool:
         """self | other Returns a new Pyeda with the disjunction with other."""
-        return Bool(
-            self.expression | other.expression, typeset=self.typeset + other.typeset
-        )
+        return Bool(self.expression | other.expression,
+                    typeset=self.typeset + other.typeset)
 
     def __invert__(self: Bool) -> Bool:
         """Returns a new Pyeda with the negation of self."""
@@ -182,16 +192,14 @@ class Bool(Specification):
     def __rshift__(self: Bool, other: Bool) -> Bool:
         """>> Returns a new Pyeda that is the result of self -> other
         (implies)"""
-        return Bool(
-            self.expression >> other.expression, typeset=self.typeset + other.typeset
-        )
+        return Bool(self.expression >> other.expression,
+                    typeset=self.typeset + other.typeset)
 
     def __lshift__(self: Bool, other: Bool) -> Bool:
         """<< Returns a new Pyeda that is the result of other -> self
         (implies)"""
-        return Bool(
-            other.expression >> self.expression, typeset=self.typeset + other.typeset
-        )
+        return Bool(other.expression >> self.expression,
+                    typeset=self.typeset + other.typeset)
 
     def __iand__(self: Bool, other: Bool) -> Bool:
         """self &= other Modifies self with the conjunction with other."""
@@ -200,7 +208,8 @@ class Bool(Specification):
 
     def __ior__(self: Bool, other: Bool) -> Bool:
         """self |= other Modifies self with the disjunction with other."""
-        self._pyeda_expression = expr(self._pyeda_expression | other.expression)
+        self._pyeda_expression = expr(self._pyeda_expression
+                                      | other.expression)
         return self
 
     @property

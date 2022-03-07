@@ -1,7 +1,7 @@
 import spot
+from crome_logic.tools.io import save_to_file
 
 from crome_synthesis.controller.synthesis import generate_controller
-from crome_logic.tools.io import save_to_file
 
 
 def example_1() -> None:

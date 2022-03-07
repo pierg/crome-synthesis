@@ -121,7 +121,8 @@ class Typeset(dict[str, AnyCromeType]):
 
     def get_sub_typeset(self, formula: str):
         set_ap_str = extract_ap(formula)
-        set_of_types = set(filter((lambda x: x.name in set_ap_str), self.values()))
+        set_of_types = set(
+            filter((lambda x: x.name in set_ap_str), self.values()))
         return Typeset(set_of_types)
 
     def _add_elements(self, types: set[AnyCromeType]):
@@ -138,10 +139,8 @@ class Typeset(dict[str, AnyCromeType]):
         if len(self.values()) > 1:
             for (a, b) in combinations(self.values(), 2):
                 """If they are not base variables"""
-                if (
-                    a.__class__.__name__ in BASE_CLASS_TYPES
-                    or b.__class__.__name__ in BASE_CLASS_TYPES
-                ):
+                if (a.__class__.__name__ in BASE_CLASS_TYPES
+                        or b.__class__.__name__ in BASE_CLASS_TYPES):
                     continue
                 if isinstance(a, type(b)):
                     if a in self._super_types:
@@ -182,13 +181,13 @@ class Typeset(dict[str, AnyCromeType]):
                         self._adjacent_types[variable] = {variable}
                     for adjacent_class in variable.adjacency_set:
                         for variable_candidate in filter(
-                            lambda x: isinstance(x, Boolean), self.values()
-                        ):
-                            if (
-                                variable_candidate.__class__.__name__ == adjacent_class
-                                and isinstance(variable_candidate, Boolean)
-                            ):
-                                self._adjacent_types[variable].add(variable_candidate)
+                                lambda x: isinstance(x, Boolean),
+                                self.values()):
+                            if (variable_candidate.__class__.__name__
+                                    == adjacent_class and isinstance(
+                                        variable_candidate, Boolean)):
+                                self._adjacent_types[variable].add(
+                                    variable_candidate)
 
     @property
     def super_types(self) -> dict[AnyCromeType, set[AnyCromeType]]:
@@ -202,7 +201,8 @@ class Typeset(dict[str, AnyCromeType]):
     def adjacent_types(self) -> dict[Boolean, set[Boolean]]:
         return self._adjacent_types
 
-    def extract_inputs_outputs(self) -> tuple[set[AnyCromeType], set[AnyCromeType]]:
+    def extract_inputs_outputs(
+            self) -> tuple[set[AnyCromeType], set[AnyCromeType]]:
         """Returns a set of variables in the typeset that are not controllable
         and controllable."""
         i = set()

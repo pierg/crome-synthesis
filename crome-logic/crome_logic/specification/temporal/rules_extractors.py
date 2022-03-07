@@ -1,5 +1,6 @@
 from crome_logic.specification import Specification
-from crome_logic.specification.string_logic import and_, f_, g_, implies_, not_, or_, x_
+from crome_logic.specification.string_logic import (and_, f_, g_, implies_,
+                                                    not_, or_, x_)
 from crome_logic.specification.temporal import LTL
 from crome_logic.typeset import Typeset
 from crome_logic.typesimple import CromeType
@@ -19,13 +20,10 @@ def extract_refinement_rules(
         if isinstance(key_type, Boolean):
             for super_type in set_super_types:
                 rules_str.append(
-                    g_(
-                        implies_(
-                            key_type.name,
-                            super_type.name,
-                        ),
-                    ),
-                )
+                    g_(implies_(
+                        key_type.name,
+                        super_type.name,
+                    ), ), )
                 rules_typeset += Typeset({key_type})
                 rules_typeset += Typeset(set_super_types)
 
@@ -60,9 +58,7 @@ def extract_mutex_rules(
                 for elem in neg_group:
                     and_elements.append(not_(elem.name))
                 or_elements.append(and_(and_elements, brackets=True))
-            rules_str.append(
-                g_(or_(or_elements, brackets=False)),
-            )
+            rules_str.append(g_(or_(or_elements, brackets=False)), )
             rules_typeset += Typeset(set(mutex_group))
 
     if len(rules_str) == 0:
@@ -94,14 +90,8 @@ def extract_adjacency_rules(
                 g_(
                     implies_(
                         key_type.name,
-                        x_(
-                            or_(
-                                [e.name for e in set_adjacent_types],
-                            ),
-                        ),
-                    ),
-                ),
-            )
+                        x_(or_([e.name for e in set_adjacent_types], ), ),
+                    ), ), )
             rules_typeset += Typeset({key_type})
             rules_typeset += Typeset(set_adjacent_types)
 

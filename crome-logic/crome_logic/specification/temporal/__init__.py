@@ -3,25 +3,22 @@ from __future__ import annotations
 from enum import Enum, auto
 
 import spot
-from treelib import Tree
-
 from crome_logic.specification import Specification
 from crome_logic.specification.boolean import Bool
 from crome_logic.specification.string_logic import and_, or_
 from crome_logic.specification.temporal.tools import transform_spot_tree
-from crome_logic.specification.trees import (
-    boolean_tree_to_formula,
-    extract_atoms_dictionary,
-    gen_atoms_tree,
-    gen_ltl_tree,
-)
+from crome_logic.specification.trees import (boolean_tree_to_formula,
+                                             extract_atoms_dictionary,
+                                             gen_atoms_tree, gen_ltl_tree)
 from crome_logic.tools.atomic_propositions import extract_ap
 from crome_logic.tools.nuxmv import check_satisfiability, check_validity
 from crome_logic.typeset import Typeset
 from crome_logic.typesimple.subtype.base.boolean import Boolean
+from treelib import Tree
 
 
 class LTL(Specification):
+
     class TreeType(Enum):
         LTL = auto()
         BOOLEAN = auto()
@@ -63,7 +60,8 @@ class LTL(Specification):
         """Building the ATOMS formula and tree."""
         if boolean_formula is None:
             atom_tree = gen_atoms_tree(spot_f=self.expression)
-            self._boolean = Bool(boolean_tree_to_formula(atom_tree), tree=atom_tree)
+            self._boolean = Bool(boolean_tree_to_formula(atom_tree),
+                                 tree=atom_tree)
         else:
             self._boolean = boolean_formula
 
@@ -80,8 +78,8 @@ class LTL(Specification):
                 else:
                     ltl_formula = atoms_dictionary[str(atom)]
                 ltl_object = LTL(
-                    ltl_formula, typeset=self.typeset.get_sub_typeset(ltl_formula)
-                )
+                    ltl_formula,
+                    typeset=self.typeset.get_sub_typeset(ltl_formula))
                 atoms.add(ltl_object)
             cnf_list.append(atoms)
         return cnf_list
@@ -99,26 +97,31 @@ class LTL(Specification):
                 else:
                     ltl_formula = atoms_dictionary[str(atom)]
                 ltl_object = LTL(
-                    ltl_formula, typeset=self.typeset.get_sub_typeset(ltl_formula)
-                )
+                    ltl_formula,
+                    typeset=self.typeset.get_sub_typeset(ltl_formula))
                 atoms.add(ltl_object)
             dnf_list.append(atoms)
         return dnf_list
 
     def represent(
-        self, output_type: LTL.OutputStr = Specification.OutputStr.DEFAULT
+            self,
+            output_type: LTL.OutputStr = Specification.OutputStr.DEFAULT
     ) -> str:
         if output_type == Specification.OutputStr.DEFAULT:
             return str(self.expression)
         elif output_type == Specification.OutputStr.CNF:
-            return " & ".join([or_([str(e) for e in elem]) for elem in self.cnf()])
+            return " & ".join(
+                [or_([str(e) for e in elem]) for elem in self.cnf()])
         elif output_type == Specification.OutputStr.DNF:
-            return " | ".join(
-                [and_([str(e) for e in elem], brackets=True) for elem in self.dnf()]
-            )
+            return " | ".join([
+                and_([str(e) for e in elem], brackets=True)
+                for elem in self.dnf()
+            ])
         elif output_type == Specification.OutputStr.SUMMARY:
-            cnf = "\n".join([or_([str(e) for e in elem]) for elem in self.cnf()])
-            dnf = "\n".join([and_([str(e) for e in elem]) for elem in self.dnf()])
+            cnf = "\n".join(
+                [or_([str(e) for e in elem]) for elem in self.cnf()])
+            dnf = "\n".join(
+                [and_([str(e) for e in elem]) for elem in self.dnf()])
             ret = (
                 f"\n+++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n"
                 f"LTL SIMPLIFIED\n"
@@ -153,9 +156,8 @@ class LTL(Specification):
             formula=f"({str(self)}) & ({str(other)})",
             typeset=self.typeset + other.typeset,
         )
-        self._init_atoms_formula(
-            boolean_formula=self.boolean & other.boolean,
-        )
+        self._init_atoms_formula(boolean_formula=self.boolean
+                                 & other.boolean, )
         return self
 
     def __ior__(self: LTL, other: LTL) -> LTL:
@@ -164,9 +166,8 @@ class LTL(Specification):
             formula=f"({str(self)}) | ({str(other)})",
             typeset=self.typeset + other.typeset,
         )
-        self._init_atoms_formula(
-            boolean_formula=self.boolean | other.boolean,
-        )
+        self._init_atoms_formula(boolean_formula=self.boolean
+                                 | other.boolean, )
         return self
 
     def __and__(self: LTL, other: LTL) -> LTL:
@@ -214,10 +215,8 @@ class LTL(Specification):
     @property
     def is_satisfiable(self: LTL) -> bool:
         from crome_logic.specification.temporal.rules_extractors import (
-            extract_adjacency_rules,
-            extract_mutex_rules,
-            extract_refinement_rules,
-        )
+            extract_adjacency_rules, extract_mutex_rules,
+            extract_refinement_rules)
 
         mtx_rules = extract_mutex_rules(self.typeset)
         new_f = self
@@ -237,9 +236,8 @@ class LTL(Specification):
 
     @property
     def is_valid(self: LTL) -> bool:
-        from crome_logic.specification.temporal.rules_extractors import (
-            extract_refinement_rules,
-        )
+        from crome_logic.specification.temporal.rules_extractors import \
+            extract_refinement_rules
 
         ref_rules = extract_refinement_rules(self.typeset)
 
@@ -277,7 +275,6 @@ class LTL(Specification):
 
         True if self is an abstraction of other
         """
-
         """Check if (other -> self) is valid"""
         return (other >> self).is_valid
 

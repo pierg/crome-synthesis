@@ -12,11 +12,17 @@ We use [poetry](https://github.com/python-poetry/poetry) to manage the dependenc
 
 
 
-First install the dependency crome-logic from git
+First install the dependency crome-logic from git in the same folder where crome-synthesis is located
 ```bash
-git subtree add --prefix=crome-logic https://github.com/pierg/crome-logic.git main --squash
+git clone https://github.com/pierg/crome-logic.git
 ```
 
+
+Append it to PYTHONPATH
+
+```bash
+export PYTHONPATH=$PYTHONPATH:../crome-logic/
+```
 
 Create the environment using conda:
 

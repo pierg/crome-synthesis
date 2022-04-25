@@ -46,9 +46,9 @@ poetry install
 ```python
 def example() -> None:
     a = LTL(formula="G(F(sens))",
-            typeset=Typeset({Boolean("sens", kind=CromeType.Kind.SENSOR)}))
+            typeset=Typeset({Boolean("sens", kind=TypeKind.SENSOR)}))
     g = LTL(formula="G(sens -> act)",
-            typeset=Typeset({Boolean("act", kind=CromeType.Kind.ACTION)}))
+            typeset=Typeset({Boolean("act", kind=TypeKind.ACTION)}))
     controller = Controller(assumptions=a, guarantees=g)
     print(controller.to_string("dot"))
     print(controller.to_string("lbtt"))

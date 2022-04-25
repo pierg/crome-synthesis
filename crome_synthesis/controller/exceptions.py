@@ -1,10 +1,24 @@
 from __future__ import annotations
+from dataclasses import dataclass
 
 
-class StrixException(Exception):
-    def __init__(self, message: str):
-        self.message = f"\n******CONTROLLER_EXCEPTION******\n{message}\n"
-        print(self.message)
+@dataclass
+class ControllerException(Exception):
+    message: str
+
+    def __post_init__(self):
+        header = "*** CONTROLLER EXCEPTION ***"
+        print(f"{header}\n{self.message}")
+
+
+@dataclass
+class StrixException(ControllerException):
+    message: str
+
+    def __post_init__(self):
+        message = ("*** GENERAL STRIX EXCEPTION ***")
+        super().__init__(message)
+
 
 
 class SynthesisTimeout(StrixException):

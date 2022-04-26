@@ -1,8 +1,6 @@
 import spot
 from crome_logic.specification.temporal import LTL
-from crome_logic.tools.io import save_to_file
-from crome_logic.typeelement import CromeType, TypeKind
-from crome_logic.typeelement.basic import Boolean
+from crome_logic.tools.crome_io import save_to_file
 from crome_logic.typeelement.robotic import BooleanSensor, BooleanAction
 from crome_logic.typeset import Typeset
 

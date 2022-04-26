@@ -1,6 +1,6 @@
 import spot
 from crome_logic.specification.temporal import LTL
-from crome_logic.tools.io import save_to_file
+from crome_logic.tools.crome_io import save_to_file
 
 from crome_synthesis.controller.synthesis import generate_controller
 

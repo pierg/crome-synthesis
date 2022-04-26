@@ -34,6 +34,23 @@ poetry install
 [Strix](https://strix.model.in.tum.de) must be installed on the system. Alternatevely, a
 [docker](https://www.docker.com) must be installed and running.
 
+
+## Dependencies
+
+Clone crome-logic from git in the same folder where crome-web is located
+
+```bash
+git clone https://github.com/pierg/crome-logic.git
+```
+
+Append it to PYTHONPATH
+
+```bash
+export PYTHONPATH=$PYTHONPATH:../crome-logic/
+```
+
+
+
 ## Docker
 
 You can directly run the project by running the docker image on any platform
@@ -45,6 +62,10 @@ You can directly run the project by running the docker image on any platform
 To build the image you can run the following command
 
 `docker buildx build --platform linux/x86_64 -t [DOCKERUSERNAME]/[PROJECT]:[TAG] --push .`
+
+## Usage
+
+Check the `examples` folder
 
 ## One magic command
 

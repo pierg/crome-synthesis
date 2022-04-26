@@ -14,9 +14,9 @@ dependencies:
   - gcc
   - pip
   - pip:
-    - pyeda
-    - aenum
-    - treelib
-    - docker
-    - bloom-filter
-    - dill
+      - pyeda
+      - aenum
+      - treelib
+      - docker
+      - bloom-filter
+      - dill

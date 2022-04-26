@@ -1,4 +1,5 @@
 from __future__ import annotations
+
 from dataclasses import dataclass
 
 
@@ -16,9 +17,8 @@ class StrixException(ControllerException):
     message: str
 
     def __post_init__(self):
-        message = ("*** GENERAL STRIX EXCEPTION ***")
+        message = "*** GENERAL STRIX EXCEPTION ***"
         super().__init__(message)
-
 
 
 class SynthesisTimeout(StrixException):

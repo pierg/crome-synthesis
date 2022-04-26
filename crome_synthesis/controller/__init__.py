@@ -10,9 +10,9 @@ class Controller:
         self._assumptions = assumptions
         self._guarantees = guarantees
 
-        self._automaton: spot.automata() | None = None
+        self._automaton: spot.automata() | None = None  # type: ignore
         self._realizable: bool = False
-        self._synth_time: int = -1
+        self._synth_time: float = -1
 
         self.generate_from_spec(assumptions, guarantees)
 

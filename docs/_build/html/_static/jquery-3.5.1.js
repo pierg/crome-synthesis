@@ -9288,7 +9288,7 @@
           // If none found, seek a pair
           if (!conv) {
             for (conv2 in converters) {
-              // If conv2 outputs current
+              // If conv2 output current
               tmp = conv2.split(" ");
               if (tmp[1] === current) {
                 // If prev can be converted to accepted input

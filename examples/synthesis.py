@@ -1,7 +1,7 @@
 import spot
 from crome_logic.specification.temporal import LTL
 from crome_logic.tools.crome_io import save_to_file
-from crome_logic.typeelement.robotic import BooleanAction, BooleanSensor
+from crome_logic.typelement.robotic import BooleanAction, BooleanSensor
 from crome_logic.typeset import Typeset
 
 from crome_synthesis.controller import Controller
@@ -10,16 +10,16 @@ from crome_synthesis.controller.synthesis import generate_controller
 
 def example() -> None:
     a = LTL(
-        formula="G(F(sens))",
-        typeset=Typeset({BooleanSensor(name="sens")}),
+        _init_formula="G(F(sens))",
+        _typeset=Typeset({BooleanSensor(name="sens")}),
     )
     g = LTL(
-        formula="G(sens -> act)",
-        typeset=Typeset({BooleanAction(name="act")}),
+        _init_formula="G(sens -> act)",
+        _typeset=Typeset({BooleanAction(name="act")}),
     )
     controller = Controller(assumptions=a, guarantees=g)
-    print(controller.to_string("dot"))
-    print(controller.to_string("lbtt"))
+    controller.save("dot")
+    controller.save("lbtt")
 
 
 def example_1() -> None:

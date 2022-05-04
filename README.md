@@ -34,7 +34,6 @@ poetry install
 [Strix](https://strix.model.in.tum.de) must be installed on the system. Alternatively, a
 [docker](https://www.docker.com) must be installed and running.
 
-
 ## Dependencies
 
 Clone crome-logic from git in the same folder where crome-web is located
@@ -48,8 +47,6 @@ Append it to PYTHONPATH
 ```bash
 export PYTHONPATH=$PYTHONPATH:../crome-logic/
 ```
-
-
 
 ## Docker
 

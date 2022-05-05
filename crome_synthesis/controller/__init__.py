@@ -20,6 +20,10 @@ class Controller:
     _synth_time: float = field(init=False, repr=False, default=-1)
 
     def __post_init__(self):
+        if self.assumptions is None:
+            self.assumptions = LTL("TRUE")
+        if self.guarantees is None:
+            self.guarantees = LTL("TRUE")
         if not isinstance(self.assumptions, LTL) or not isinstance(
             self.guarantees, LTL
         ):

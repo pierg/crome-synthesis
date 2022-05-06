@@ -3,42 +3,45 @@ from __future__ import annotations
 from dataclasses import dataclass
 
 
-@dataclass
+@dataclass(kw_only=True)
 class ControllerException(Exception):
-    message: str
+    message: str = ""
 
     def __post_init__(self):
         header = "*** CONTROLLER EXCEPTION ***"
         print(f"{header}\n{self.message}")
 
 
-@dataclass
+@dataclass(kw_only=True)
 class StrixException(ControllerException):
-    message: str
+    def __post_init__(self):
+        self.message = "*** GENERAL STRIX EXCEPTION ***"
+
+
+@dataclass(kw_only=True)
+class SynthesisTimeout(StrixException):
+    command: str
+    timeout: int
 
     def __post_init__(self):
-        message = "*** GENERAL STRIX EXCEPTION ***"
-        super().__init__(message)
+        self.message = (
+            f"\n{self.command}\n\n" f"TIMEOUT occurred at {self.timeout} seconds"
+        )
 
 
-class SynthesisTimeout(StrixException):
-    def __init__(self, command: str, timeout: int):
-        self.command = command
-        self.timeout = timeout
-        message = f"\n{command}\n\n" f"TIMEOUT occurred at {timeout} seconds"
-        super().__init__(message=message)
-
-
+@dataclass(kw_only=True)
 class OutOfMemoryException(StrixException):
-    def __init__(self, command: str):
-        self.command = command
-        message = f"\n{command}\n\n" f"WENT OUT OF MEMORY"
-        super().__init__(message=message)
+    command: str
 
+    def __post_init__(self):
+        self.message = f"\n{self.command}\n\n" f"WENT OUT OF MEMORY"
 
+@dataclass(kw_only=True)
 class UnknownStrixResponse(StrixException):
-    def __init__(self, command: str, response: str):
-        self.command = command
-        self.response = response
-        message = f"\n{command}\n\n" f"RETURNED THE RESPONSE\n\n" f"{response}\n"
-        super().__init__(message=message)
+    command: str
+    response: str
+
+    def __post_init__(self):
+        self.message = (
+            f"\n{self.command}\n\n" f"RETURNED THE RESPONSE\n\n" f"{self.response}\n"
+        )

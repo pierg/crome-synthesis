@@ -5,7 +5,7 @@ RUN conda env create -f environment.yml
 
 # Use conda-pack to create a standalone enviornment in /venv:
 RUN conda install -c conda-forge conda-pack
-RUN conda-pack -n crome-logic -o /tmp/env.tar && \
+RUN conda-pack -n crome-synthesis -o /tmp/env.tar && \
   mkdir /venv && cd /venv && tar xf /tmp/env.tar && \
   rm /tmp/env.tar
 RUN /venv/bin/conda-unpack

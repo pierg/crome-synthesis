@@ -1,0 +1,8 @@
+name: crome-synthesis
+
+channels:
+  - default
+  - conda-forge
+
+dependencies:
+  - tabulate

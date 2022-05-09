@@ -36,6 +36,7 @@ class OutOfMemoryException(StrixException):
     def __post_init__(self):
         self.message = f"\n{self.command}\n\n" f"WENT OUT OF MEMORY"
 
+
 @dataclass(kw_only=True)
 class UnknownStrixResponse(StrixException):
     command: str

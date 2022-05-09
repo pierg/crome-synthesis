@@ -21,7 +21,6 @@ Append it to PYTHONPATH
 export PYTHONPATH=$PYTHONPATH:../crome-logic/
 ```
 
-
 ## Installation
 
 We use
@@ -31,13 +30,16 @@ manage the environment and dependencies.
 We use [poetry](https://github.com/python-poetry/poetry) to manage 'development'
 dependencies (e.g. linting, type checking).
 
+You need to install `conda-merge` so that we can merge all the dependecies from the
+other repositories and create the `environment.yml`
 
-You need to install `conda-merge` so that we can merge all the dependecies from the other repositories and create the `environment.yml`
 ```bash
 pip install conda-merge
 ```
 
-Once `conda-merge` is installed, you can create the `envioronment.yml` file, create the environment and activate it by runnin the following commands:
+Once `conda-merge` is installed, you can create the `envioronment.yml` file, create the
+environment and activate it by runnin the following commands:
+
 ```bash
 make conda-create
 make conda-install
@@ -49,7 +51,6 @@ Install the other dependencies with poetry (optional):
 ```bash
 poetry install
 ```
-
 
 ## Docker
 

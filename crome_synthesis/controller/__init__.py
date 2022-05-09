@@ -4,14 +4,15 @@ import pydot
 import spot
 from crome_logic.specification import Specification
 from crome_logic.specification.temporal import LTL
-from crome_logic.tools.crome_io import output_folder, save_to_file
 from crome_logic.typeset import Typeset
 from pygraphviz import AGraph
 
 from crome_synthesis.atom import AtomValues
 from crome_synthesis.controller.mealy import Mealy
 from crome_synthesis.controller.synthesis import generate_controller
+from crome_synthesis.tools import output_folder
 from crome_synthesis.tools.atomic_propositions import extract_in_out_atomic_propositions
+from crome_synthesis.tools.crome_io import save_to_file
 
 
 @dataclass
@@ -28,10 +29,12 @@ class Controller:
         init=False, repr=False, default=None
     )
 
-    _automaton: spot.twa | None = field(init=False, repr=False, default=None)
-    _mealy: Mealy | None = field(init=False, repr=False, default=None)
     _realizable: bool = field(init=False, repr=False, default=False)
+    _automaton: spot.twa | None = field(init=False, repr=False, default=None)
     _synth_time: float = field(init=False, repr=False, default=-1)
+
+    _pydotgraph: pydot.Dot | None = field(init=False, repr=False, default=None)
+    _mealy: Mealy | None = field(init=False, repr=False, default=None)
 
     def __post_init__(self):
         if self.assumptions is None:
@@ -46,7 +49,14 @@ class Controller:
         i, o = self.typeset.extract_inputs_outputs()
         self._input_aps, self._output_aps = extract_in_out_atomic_propositions(i, o)
 
-        self.generate_from_spec(self.assumptions, self.guarantees)
+        self._realizable, self._automaton, self._synth_time = self.generate_from_spec(
+            self.assumptions, self.guarantees
+        )
+
+        self._pydotgraph = pydot.graph_from_dot_data(self._automaton.to_str("dot"))[0]
+        self._mealy = Mealy.from_pydotgraph(
+            self._pydotgraph, input_aps=self.input_aps, output_aps=self.output_aps
+        )
 
     @property
     def realizable(self) -> bool:
@@ -68,7 +78,9 @@ class Controller:
     def mealy(self) -> Mealy:
         return self._mealy
 
-    def generate_from_spec(self, assumptions: LTL | None, guarantees: LTL):
+    def generate_from_spec(
+        self, assumptions: LTL | None, guarantees: LTL
+    ) -> tuple[bool, spot.twa, float]:
 
         self.assumptions = assumptions
         self.guarantees = guarantees
@@ -84,27 +96,23 @@ class Controller:
             f"Generating controller for the formula:\n({a}) -> ({g})\ninputs:\t\t{i}\noutputs:\t{o}"
         )
 
-        self._realizable, automaton, self._synth_time = generate_controller(a, g, i, o)
+        realizable, automaton, synth_time = generate_controller(a, g, i, o)
 
-        if self._realizable:
+        if realizable:
             print(f"Controller generated in {self._synth_time} seconds")
 
-        self._automaton = spot.automaton(automaton)
-        self._graph = pydot.graph_from_dot_data(self._automaton.to_str("dot"))[0]
-        self._mealy = Mealy.from_pydotgraph(
-            self._graph, input_aps=self.input_aps, output_aps=self.output_aps
-        )
+        return realizable, spot.automaton(automaton), synth_time
 
     def save(self, format: str = "hoa"):
         file_name = f"ctrl_{self.name}.{format}"
-
         if format in ["png", "eps", "pdf"]:
             graph = AGraph(string=self._automaton.to_str("dot"))
             graph.layout()
-            path = graph.draw(path=output_folder / file_name, format=format)
-            print(path)
+            graph.draw(path=output_folder / file_name, format=format)
+            print(f"{file_name} saved in {output_folder}")
+
         elif format in ["hoa", "dot", "spin", "lbtt"]:
             file_path = save_to_file(
                 file_content=self._automaton.to_str(format), file_name=file_name
             )
-            print(f"Controller saved in {file_path}")
+            print(f"{file_path} generated")

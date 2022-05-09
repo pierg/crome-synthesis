@@ -12,9 +12,11 @@ env-install:
 
 .PHONY: env-activate
 env-activate:
-	conda activate crome-contracts
+	conda activate crome-synthesis
 
 
+.PHONY: env-all
+env-all: env-create env-install env-activate
 
 
 .PHONY: lint

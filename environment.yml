@@ -1,0 +1,23 @@
+channels:
+- default
+- conda-forge
+dependencies:
+- aenum
+- dill
+- docker-py
+- flask
+- matplotlib
+- pip
+- poetry
+- pre-commit
+- pydantic
+- pydot
+- pygraphviz
+- python=3.10
+- spot
+- tabulate
+- treelib
+- pip:
+  - bloom-filter
+  - pyeda
+name: crome-synthesis

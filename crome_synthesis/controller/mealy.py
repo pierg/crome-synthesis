@@ -8,7 +8,7 @@ from pydot import Dot
 from tabulate import tabulate
 
 from crome_synthesis.atom import Atom, Atoms, AtomValues
-from crome_synthesis.tools.atomic_propositions import extract_transition_aps
+from crome_synthesis.tools.atomic_propositions import extract_transitions
 
 
 @dataclass(frozen=True)
@@ -24,7 +24,7 @@ class Transition:
 class State:
     def __init__(self, name: str, transitions: Iterable[Transition] | None = None):
         self._name: str = name
-        self._transitions: dict[Atoms, tuple[State, Atoms]] = dict()
+        self._transitions: dict[Atoms, set[tuple[State, Atoms]]] = dict()
         self._is_initial = False
 
         if transitions is not None:
@@ -40,13 +40,14 @@ class State:
         return self._transitions
 
     def add_transition(self, transition: Transition):
-        self.transitions[transition.input] = (transition.new_state, transition.output)
-
-    def step(self, step: Atoms) -> tuple[State, Atoms] | None:
-        try:
-            return self.transitions[step]
-        except KeyError:
-            return None
+        if transition.input in self.transitions.keys():
+            self.transitions[transition.input].add(
+                (transition.new_state, transition.output)
+            )
+        else:
+            self.transitions[transition.input] = {
+                (transition.new_state, transition.output)
+            }
 
     @property
     def is_initial(self):
@@ -93,17 +94,17 @@ class Mealy:
                 states[state_id] = State(name=state_id)
             except:
                 pass
-        print(states)
         for edge in graph.get_edges():
             if edge.get_source() == "I":
                 states[edge.get_destination()].set_as_initial()
             else:
-                ins, outs = extract_transition_aps(
+                transitions = extract_transitions(
                     edge.get_attributes()["label"], input_aps, output_aps
                 )
-                source = states[edge.get_source()]
-                destination = states[edge.get_destination()]
-                source.add_transition(Transition(ins, destination, outs))
+                for ins, outs in transitions:
+                    source = states[edge.get_source()]
+                    destination = states[edge.get_destination()]
+                    source.add_transition(Transition(ins, destination, outs))
         return cls(
             states=list(states.values()), input_aps=input_aps, output_aps=output_aps
         )
@@ -123,7 +124,8 @@ class Mealy:
         return ret
 
     def react(self, inputs: Atoms) -> Atoms:
-        next_state, output = self.current_state.transitions[inputs]
+        alternatives = self.current_state.transitions[inputs]
+        next_state, output = random.choice(list(alternatives))
         object.__setattr__(self, "current_state", next_state)
         return output
 
@@ -152,13 +154,14 @@ class Mealy:
         headers = ["ins", "s", "s'", "outs"]
         entries = []
         for state in self.states:
-            for inputs, (next_state, outputs) in state.transitions.items():
-                line = []
-                line.append(str(inputs))
-                line.append(state.name)
-                line.append(next_state.name)
-                line.append(str(outputs))
-                entries.append(line)
+            for inputs, alternatives in state.transitions.items():
+                for (next_state, outputs) in alternatives:
+                    line = []
+                    line.append(str(inputs))
+                    line.append(state.name)
+                    line.append(next_state.name)
+                    line.append(str(outputs))
+                    entries.append(line)
 
         output += tabulate(entries, headers=headers)
 

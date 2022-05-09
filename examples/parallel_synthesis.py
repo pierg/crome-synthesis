@@ -13,17 +13,16 @@ def example_simpler() -> None:
 
     spec = a >> g
 
-    print(spec)
-    print("\n")
     c_spec = Controller(guarantees=spec, name="spec_top")
     c_spec.save(format="pdf")
-    print(c_spec)
-    print("\n")
+    print(c_spec.mealy)
+
+    print("\n\n")
     for i, s in enumerate(spec.cnf.to_set):
         c_s = Controller(guarantees=s, name=f"spec_{i}")
         c_s.save(format="pdf")
-        print(c_s)
-        print("\n")
+        print(c_s.mealy)
+        print("\n\n")
 
 
 def example() -> None:
@@ -44,6 +43,7 @@ def example() -> None:
         c_s.save(format="dot")
         print(c_s)
         print("\n")
+        print(f"\n\nMEALY:\n{c_s.mealy.__str__()}")
 
 
 if __name__ == "__main__":

@@ -2,6 +2,30 @@ from crome_logic.specification.temporal import LTL
 from crome_logic.typeset import Typeset
 
 from crome_synthesis.controller import Controller
+from crome_synthesis.tools.crome_io import save_to_file
+
+
+def robot() -> None:
+    # a = LTL("G(F(a))", _typeset=Typeset.from_aps(uncontrollable={"a"}))
+    g = LTL(
+        "G (!g_0 | !g_1) & G(r_0 -> F g_0) & G( r_1 -> F g_1)",
+        _typeset=Typeset.from_aps(uncontrollable={"r_1", "r_0"}, controllable={"g_1", "g_0"}),
+    )
+
+    spec = g
+
+    c_spec = Controller(guarantees=spec, name="spec_top")
+    c_spec.save(format="pdf")
+    print(c_spec.mealy)
+
+    print("\n\n")
+    for i, s in enumerate(spec.cnf.to_set):
+        c_s = Controller(guarantees=s, name=f"spec_{i}")
+        c_s.save(format="pdf")
+        save_to_file(str(s), file_name=f"spec_{i}")
+        print(c_s.mealy)
+        print("\n\n")
+
 
 
 def example_simpler() -> None:
@@ -47,4 +71,4 @@ def example() -> None:
 
 
 if __name__ == "__main__":
-    example_simpler()
+    robot()

@@ -1,0 +1,52 @@
+  t  inputs           outputs
+---  ---------------  -------------------
+  0                   k1
+  1  breakfast_ready  k2
+  2  breakfast_ready  hold, k1
+  3                   hold, l3
+  4                   hold, l2
+  5                   serve_breakfast, l3
+  6  breakfast_ready  l3
+  7                   k1
+  8  breakfast_ready  k2
+  9  breakfast_ready  hold, k1
+ 10                   hold, l3
+ 11                   hold, l2
+ 12                   serve_breakfast, l3
+ 13  breakfast_ready  l3
+ 14                   k1
+ 15  breakfast_ready  k2
+ 16                   k1
+ 17  breakfast_ready  l3
+ 18  breakfast_ready  hold, l2
+ 19                   serve_breakfast, l3
+ 20  breakfast_ready  l3
+ 21  breakfast_ready  hold, k1
+ 22                   hold, k2
+ 23                   hold, k1
+ 24                   hold, l3
+ 25                   hold, l2
+ 26                   serve_breakfast, l3
+ 27  breakfast_ready  l3
+ 28  breakfast_ready  hold, k1
+ 29                   hold, k2
+ 30                   hold, k1
+ 31                   hold, l3
+ 32                   hold, l2
+ 33                   serve_breakfast, l3
+ 34  breakfast_ready  l3
+ 35                   k1
+ 36  breakfast_ready  k2
+ 37                   k1
+ 38  breakfast_ready  l3
+ 39  breakfast_ready  hold, l2
+ 40                   serve_breakfast, l3
+ 41  breakfast_ready  l3
+ 42  breakfast_ready  hold, k1
+ 43                   hold, k2
+ 44                   hold, k1
+ 45                   hold, l3
+ 46                   hold, l2
+ 47                   serve_breakfast, l3
+ 48  breakfast_ready  l3
+ 49  breakfast_ready  hold, k1

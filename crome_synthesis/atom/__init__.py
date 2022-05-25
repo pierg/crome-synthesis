@@ -28,7 +28,7 @@ class Atom:
     def is_compatible_with(self, other: Atom):
         if other.typelement == self.typelement:
             if (self.value == Val.true and other.value == Val.false) or (
-                self.value == Val.false and other.value == Val.true
+                    self.value == Val.false and other.value == Val.true
             ):
                 return False
         return True
@@ -54,6 +54,10 @@ class Atoms:
 
     def determinize_from(self, other: Atoms):
         pass
+
+    @property
+    def str_positive_only(self):
+        return " ".join([str(a) for a in list(filter(lambda a: a.value == Val.true, self.atoms))])
 
     def __str__(self):
         return " ".join([str(a) for a in self.atoms])

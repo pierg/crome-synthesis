@@ -1,0 +1,16 @@
+States          	 S0, S1, S2, S3, S4, S5
+Inital State    	 S0
+Input  Alphabet 	 groceries_recognized
+Output Alphabet 	 hold, store, l4, k3, h2, h1, l3, l6, b2, k1, k2, l5, l1, l2, r1
+
+true_ins              s    s'    true_outs
+--------------------  ---  ----  -----------
+                      S0   S1    k1
+groceries_recognized  S0   S2    k3
+-                     S1   S3    hold k2
+                      S2   S1    k1
+groceries_recognized  S2   S4    hold k1
+                      S3   S5    store k3
+                      S4   S3    hold k2
+                      S5   S1    k1
+groceries_recognized  S5   S2    k3

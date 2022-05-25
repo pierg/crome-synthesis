@@ -1,0 +1,52 @@
+  t  inputs    outputs
+---  --------  ---------
+  0  alexa     reply
+  1  alexa     reply
+  2
+  3  alexa     reply
+  4
+  5
+  6
+  7  alexa     reply
+  8
+  9
+ 10  alexa     reply
+ 11  alexa     reply
+ 12  alexa     reply
+ 13
+ 14  alexa     reply
+ 15
+ 16  alexa     reply
+ 17
+ 18  alexa     reply
+ 19
+ 20
+ 21  alexa     reply
+ 22
+ 23
+ 24  alexa     reply
+ 25  alexa     reply
+ 26  alexa     reply
+ 27
+ 28
+ 29  alexa     reply
+ 30
+ 31  alexa     reply
+ 32  alexa     reply
+ 33  alexa     reply
+ 34  alexa     reply
+ 35  alexa     reply
+ 36
+ 37  alexa     reply
+ 38  alexa     reply
+ 39  alexa     reply
+ 40
+ 41  alexa     reply
+ 42  alexa     reply
+ 43
+ 44  alexa     reply
+ 45
+ 46  alexa     reply
+ 47
+ 48
+ 49  alexa     reply

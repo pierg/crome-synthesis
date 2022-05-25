@@ -1,0 +1,52 @@
+  t  inputs             outputs
+---  -----------------  ---------
+  0  object_recognized  l4
+  1                     l4
+  2  object_recognized  hold, l5
+  3                     hold, l6
+  4                     hold, l3
+  5                     hold, l6
+  6                     hold, l5
+  7                     hold, l4
+  8                     hold, l1
+  9                     hold, l2
+ 10                     hold, l3
+ 11                     hold, k1
+ 12                     hold, k3
+ 13                     drop, k1
+ 14  object_recognized  k1
+ 15  object_recognized  hold, l3
+ 16                     hold, l2
+ 17                     hold, l5
+ 18                     hold, l4
+ 19                     hold, l5
+ 20                     hold, l6
+ 21                     hold, l3
+ 22                     hold, l6
+ 23                     hold, l5
+ 24                     hold, l4
+ 25                     hold, l1
+ 26                     hold, l2
+ 27                     hold, l3
+ 28                     hold, k1
+ 29                     hold, k3
+ 30                     drop, k1
+ 31                     l3
+ 32                     l6
+ 33  object_recognized  hold, l5
+ 34                     hold, l4
+ 35                     hold, l5
+ 36                     hold, l6
+ 37                     hold, l3
+ 38                     hold, l6
+ 39                     hold, l5
+ 40                     hold, l4
+ 41                     hold, l1
+ 42                     hold, l2
+ 43                     hold, l3
+ 44                     hold, k1
+ 45                     hold, k3
+ 46                     drop, k1
+ 47                     l3
+ 48                     l6
+ 49  object_recognized  hold, l5

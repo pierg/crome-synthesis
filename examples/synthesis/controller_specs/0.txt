@@ -1,0 +1,79 @@
+# - hold drop not mutex
+# + good holding
+# - no short path
+
+**ASSUMPTIONS**
+
+# only show objects in the living room
+# G((!object_recognized & !(l1 | l2 | l3 | l4 | l5 | l6)) -> X ! object_recognized)
+
+# if the robot has the object, then disable the sensor for new objects
+G(hold -> X(!object_recognized))
+
+# WRONG - removed
+#G(object_recognized -> ((X object_recognized) | (hold & X !object_recognized))
+
+
+**GUARANTEES**
+
+# patrol living room
+G(F(l1)) & G(F(l2)) & G(F(l3)) & G(F(l4)) & G(F(l5)) & G(F(l6))
+
+# do not hold if no object is sensed
+G((!hold & !object_recognized) -> X(!hold))
+
+# keep holding unless the robot drops the object
+G((hold & X !drop) -> X(hold))
+
+# if it drops the object then it does not hold anymore
+G((drop) -> X(!hold))
+
+# if it wants to drops then it is holding an object
+G(X drop -> (hold))
+
+# if it drops then it is in the garbage location (k3) and it is holding an objects
+# G(X drop -> (k3))
+G(k3 <-> X drop)
+
+G(F(!hold))
+
+
+
+# if the robot is available to hold and
+# its in the location where it recognises an object
+# then it should not move from that location
+G((object_recognized & !hold & l1) -> X (l1))
+G((object_recognized & !hold & l2) -> X (l2))
+G((object_recognized & !hold & l3) -> X (l3))
+G((object_recognized & !hold & l4) -> X (l4))
+G((object_recognized & !hold & l5) -> X (l5))
+G((object_recognized & !hold & l6) -> X (l6))
+
+
+
+
+G((l4 & ! (k3) & ! (h2) & ! (h1) & ! (l3) & ! (l6) & ! (b2) & ! (k1) & ! (k2) & ! (l5) & ! (l1) & ! (l2) & ! (r1)) | (k3 & ! (l4) & ! (h2) & ! (h1) & ! (l3) & ! (l6) & ! (b2) & ! (k1) & ! (k2) & ! (l5) & ! (l1) & ! (l2) & ! (r1)) | (h2 & ! (l4) & ! (k3) & ! (h1) & ! (l3) & ! (l6) & ! (b2) & ! (k1) & ! (k2) & ! (l5) & ! (l1) & ! (l2) & ! (r1)) | (h1 & ! (l4) & ! (k3) & ! (h2) & ! (l3) & ! (l6) & ! (b2) & ! (k1) & ! (k2) & ! (l5) & ! (l1) & ! (l2) & ! (r1)) | (l3 & ! (l4) & ! (k3) & ! (h2) & ! (h1) & ! (l6) & ! (b2) & ! (k2) & ! (k1) & ! (l5) & ! (l1) & ! (l2) & ! (r1)) | (l6 & ! (l4) & ! (k3) & ! (h2) & ! (h1) & ! (l3) & ! (b2) & ! (k1) & ! (k2) & ! (l5) & ! (l1) & ! (l2) & ! (r1)) | (b2 & ! (l4) & ! (k3) & ! (h2) & ! (h1) & ! (l3) & ! (k2) & ! (l6) & ! (k1) & ! (l5) & ! (l1) & ! (l2) & ! (r1)) | (k1 & ! (l4) & ! (k3) & ! (h2) & ! (h1) & ! (l3) & ! (l6) & ! (b2) & ! (k2) & ! (l5) & ! (l1) & ! (l2) & ! (r1)) | (k2 & ! (l4) & ! (k3) & ! (h2) & ! (h1) & ! (l3) & ! (l6) & ! (b2) & ! (k1) & ! (l5) & ! (l1) & ! (l2) & ! (r1)) | (l5 & ! (l4) & ! (k3) & ! (h2) & ! (h1) & ! (l3) & ! (l6) & ! (b2) & ! (k1) & ! (k2) & ! (l1) & ! (l2) & ! (r1)) | (l1 & ! (l4) & ! (k3) & ! (h2) & ! (h1) & ! (l3) & ! (l6) & ! (b2) & ! (k1) & ! (k2) & ! (l5) & ! (l2) & ! (r1)) | (l2 & ! (l4) & ! (k3) & ! (h2) & ! (h1) & ! (l3) & ! (l6) & ! (b2) & ! (k1) & ! (k2) & ! (l5) & ! (l1) & ! (r1)) | (r1 & ! (l4) & ! (k3) & ! (h2) & ! (h1) & ! (l3) & ! (l6) & ! (b2) & ! (k1) & ! (k2) & ! (l5) & ! (l1) & ! (l2)))
+G(((l4) -> (X((l5 | l4 | l1)))))
+G(((k3) -> (X((k2 | k3 | k1)))))
+G(((h2) -> (X((h1 | l3 | h2)))))
+G(((h1) -> (X((h1 | h2 | l2)))))
+G(((l3) -> (X((h2 | l3 | l6 | k1 | l2 | r1)))))
+G(((l6) -> (X((l5 | l6 | l3)))))
+G(((b2) -> (X((l2 | b2)))))
+G(((k1) -> (X((k3 | l3 | k2 | k1)))))
+G(((k2) -> (X((k3 | k2 | k1)))))
+G(((l5) -> (X((l5 | l4 | l6 | l2)))))
+G(((l1) -> (X((l4 | l1 | l2)))))
+G(((l2) -> (X((h1 | l3 | b2 | l5 | l1 | l2)))))
+G(((r1) -> (X((r1 | l3)))))
+
+
+**INPUTS**
+
+object_recognized
+
+**OUTPUTS**
+
+hold, drop, l4, k3, h2, h1, l3, l6, b2, k1, k2, l5, l1, l2, r1
+
+**END**

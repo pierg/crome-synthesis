@@ -1,4 +1,5 @@
 from crome_logic.specification.boolean import Bool
+from crome_logic.tools.string_manipulation import pyeda_syntax_fix
 from crome_logic.typelement.basic import Boolean
 
 from crome_synthesis.atom import Atoms, AtomValues
@@ -23,9 +24,15 @@ def extract_in_out_atomic_propositions(
 def extract_transitions(
     formula: str, input_aps: dict[str, AtomValues], output_aps: dict[str, AtomValues]
 ) -> set[tuple[Atoms, Atoms]]:
+
     alternatives: set[tuple[Atoms, Atoms]] = set()
 
+    if pyeda_syntax_fix(formula) == "1":
+        return alternatives
+
+
     boolean = Bool(formula)
+
 
     for clause in boolean.dnf.clauses:
 

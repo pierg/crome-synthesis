@@ -1,0 +1,52 @@
+  t  inputs                outputs
+---  --------------------  ---------
+  0                        k1
+  1  groceries_recognized  hold, k2
+  2                        store, k3
+  3                        k1
+  4  groceries_recognized  hold, k2
+  5                        store, k3
+  6                        k1
+  7  groceries_recognized  hold, k2
+  8                        store, k3
+  9  groceries_recognized  k3
+ 10  groceries_recognized  hold, k1
+ 11                        hold, k2
+ 12                        store, k3
+ 13                        k1
+ 14  groceries_recognized  hold, k2
+ 15                        store, k3
+ 16  groceries_recognized  k3
+ 17                        k1
+ 18  groceries_recognized  hold, k2
+ 19                        store, k3
+ 20                        k1
+ 21  groceries_recognized  hold, k2
+ 22                        store, k3
+ 23                        k1
+ 24  groceries_recognized  hold, k2
+ 25                        store, k3
+ 26                        k1
+ 27  groceries_recognized  hold, k2
+ 28                        store, k3
+ 29                        k1
+ 30  groceries_recognized  hold, k2
+ 31                        store, k3
+ 32                        k1
+ 33  groceries_recognized  hold, k2
+ 34                        store, k3
+ 35                        k1
+ 36  groceries_recognized  hold, k2
+ 37                        store, k3
+ 38                        k1
+ 39  groceries_recognized  hold, k2
+ 40                        store, k3
+ 41  groceries_recognized  k3
+ 42  groceries_recognized  hold, k1
+ 43                        hold, k2
+ 44                        store, k3
+ 45                        k1
+ 46  groceries_recognized  hold, k2
+ 47                        store, k3
+ 48                        k1
+ 49  groceries_recognized  hold, k2

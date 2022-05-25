@@ -1,0 +1,9 @@
+States          	 S0
+Inital State    	 S0
+Input  Alphabet 	 alexa
+Output Alphabet 	 reply
+
+true_ins    s    s'    true_outs
+----------  ---  ----  -----------
+            S0   S0
+alexa       S0   S0    reply

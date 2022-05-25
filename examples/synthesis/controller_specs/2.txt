@@ -1,0 +1,23 @@
+# SCENARIO 2 SERVICE ROBOT
+# Similar to a modern smart-speaker, the robot can be asked to reply to any question.
+# Description: when triggered by a special voice command, immediately reply
+
+
+**ASSUMPTIONS**
+
+
+**GUARANTEES**
+
+G(((alexa) <-> (reply)))
+
+
+**INPUTS**
+
+alexa
+
+**OUTPUTS**
+
+reply
+
+
+**END**

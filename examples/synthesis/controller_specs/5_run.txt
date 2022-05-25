@@ -1,0 +1,52 @@
+  t  inputs              outputs
+---  ------------------  ---------
+  0                      k3
+  1  garbage_recognized  k1
+  2                      l3
+  3                      h2
+  4                      e2
+  5                      hold, e1
+  6                      drop, e2
+  7                      h2
+  8                      l3
+  9                      k1
+ 10                      k3
+ 11  garbage_recognized  k1
+ 12                      l3
+ 13                      h2
+ 14                      e2
+ 15                      hold, e1
+ 16                      drop, e2
+ 17                      h2
+ 18                      l3
+ 19                      k1
+ 20                      k3
+ 21  garbage_recognized  k1
+ 22                      l3
+ 23                      h2
+ 24                      e2
+ 25                      hold, e1
+ 26                      drop, e2
+ 27                      h2
+ 28                      l3
+ 29                      k1
+ 30                      k3
+ 31  garbage_recognized  k1
+ 32                      l3
+ 33                      h2
+ 34                      e2
+ 35                      hold, e1
+ 36                      drop, e2
+ 37                      h2
+ 38                      l3
+ 39                      k1
+ 40                      k3
+ 41  garbage_recognized  k1
+ 42                      l3
+ 43                      h2
+ 44                      e2
+ 45                      hold, e1
+ 46                      drop, e2
+ 47                      h2
+ 48                      l3
+ 49                      k1

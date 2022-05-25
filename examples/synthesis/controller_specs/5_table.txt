@@ -1,0 +1,20 @@
+States          	 S0, S1, S2, S3, S4, S5, S6, S7, S8, S9, S10, S11
+Inital State    	 S0
+Input  Alphabet 	 garbage_recognized
+Output Alphabet 	 hold, drop, l3, k1, h2, k3, e2, e1
+
+true_ins            s    s'    true_outs
+------------------  ---  ----  -----------
+                    S0   S1    k3
+garbage_recognized  S0   S2    k1
+-                   S1   S3    k1
+                    S2   S1    k3
+                    S3   S4    l3
+                    S4   S5    h2
+                    S5   S6    e2
+                    S6   S7    hold e1
+                    S7   S8    drop e2
+                    S8   S9    h2
+                    S9   S10   l3
+                    S10  S11   k1
+                    S11  S1    k3

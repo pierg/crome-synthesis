@@ -1,0 +1,68 @@
+# SCENARIO 1 CLEAN UP
+# Inside the living room are some misplaced objects.
+# The robot has to tidy up that room, throwing to the garbage the unrecognized ones.
+# Description: Go around the living room and drop any object in the garbage
+# - no short path
+
+**ASSUMPTIONS**
+
+# RULE A1: if the robot has the object, then disable the sensor for new objects
+G(hold -> X(!object_recognized))
+
+
+**GUARANTEES**
+
+# GOAL 1: patrol living room
+G(F(l1)) & G(F(l2)) & G(F(l3)) & G(F(l4)) & G(F(l5)) & G(F(l6))
+
+# GOAL 2: grop objects in the garbage
+G(k3 <-> X drop)
+
+# RULE G1: keep robots with free hands
+G(F(!hold))
+
+# RULE G2: keep holding unless the robot drops the object
+G((hold & X !drop) -> X(hold))
+
+# RULE G3: if it drops the object then it does not hold anymore
+G((drop) -> X(!hold))
+
+# RULE G4: if it wants to drops then it is holding an object
+G(X drop -> (hold))
+
+
+# if the robot is available to hold and
+# its in the location where it recognises an object
+# then it should not move from that location
+G((object_recognized & !hold & l1) -> X (l1))
+G((object_recognized & !hold & l2) -> X (l2))
+G((object_recognized & !hold & l3) -> X (l3))
+G((object_recognized & !hold & l4) -> X (l4))
+G((object_recognized & !hold & l5) -> X (l5))
+G((object_recognized & !hold & l6) -> X (l6))
+
+
+
+G((k2 & !(k3) & !(l3) & !(k1) & !(l1) & !(l2) & !(l6) & !(l5) & !(l4)) | (k3 & !(k2) & !(l3) & !(k1) & !(l1) & !(l2) & !(l6) & !(l5) & !(l4)) | (k1 & !(k3) & !(k2) & !(l3) & !(l1) & !(l2) & !(l6) & !(l5) & !(l4)) | (l3 & !(k3) & !(k2) & !(k1) & !(l1) & !(l2) & !(l6) & !(l5) & !(l4)) | (l1 & !(k2) & !(k3) & !(l3) & !(k1) & !(l2) & !(l6) & !(l5) & !(l4)) | (l4 & !(k2) & !(k3) & !(l3) & !(k1) & !(l1) & !(l2) & !(l6) & !(l5)) | (l2 & !(k2) & !(k3) & !(l3) & !(k1) & !(l1) & !(l6) & !(l5) & !(l4)) | (l6 & !(k2) & !(k3) & !(l3) & !(k1) & !(l1) & !(l2) & !(l5) & !(l4)) | (l5 & !(k2) & !(k3) & !(l3) & !(k1) & !(l1) & !(l4) & !(l2) & !(l6)))
+
+G(((l3) -> (X((k1 | l6 | l3 | l2)))))
+G(((k1) -> (X((k3 | k2 | l3 | k1)))))
+G(((l1) -> (X((l1 | l4 | l2)))))
+G(((l5) -> (X((l2 | l6 | l5 | l4)))))
+G(((k2) -> (X((k2 | k1 | k3)))))
+G(((k3) -> (X((k3 | k2 | k1)))))
+G(((l2) -> (X((l1 | l5 | l3 | l2)))))
+G(((l6) -> (X((l6 | l3 | l5)))))
+G(((l4) -> (X((l1 | l5 | l4)))))
+
+
+
+**INPUTS**
+
+object_recognized
+
+**OUTPUTS**
+
+hold, drop, k2, k3, k1, l3, l1, l4, l2, l6, l5
+
+**END**

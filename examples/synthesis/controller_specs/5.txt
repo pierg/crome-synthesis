@@ -1,0 +1,60 @@
+# SCENARIO 5 TAKE OUT THE GARBAGE TEXT
+# - it's not blocked in location when it recognized the garbage, NEXT problem
+
+**ASSUMPTIONS**
+
+# RULE A1: if the robot has the garbage, then disable the sensor for new garbage
+G(hold -> X(!garbage_recognized))
+
+# RULE A2: only regonize the garbage in the garbage area
+G(!k3 -> X(!garbage_recognized))
+
+
+
+**GUARANTEES**
+
+# GOAL 1: strict order visit from garbage to entrance
+#F(k3) & F(h2) & F(e1) & (!(h2) U k3) & (!(e1) U h2)
+
+# Ordered Patrolling k3, e1
+G(F(k3 & F(e1))) & (!(e1) U k3) & G(((e1) -> (X((!(e1) U k3))))) & G(((k3) -> (X((!(k3) U e1)))))
+
+# GOAL 2: drop garbage in e1
+G(e1 <-> X drop)
+
+# RULE keep robots with free hands
+G(F(!hold))
+
+# RULE keep holding unless the robot drops the object
+G((hold & X !drop) -> X(hold))
+
+# RULE if it drops the object then it does not hold anymore
+G((drop) -> X(!hold))
+
+# RULE if it wants to drops then it is holding an object
+G(X drop -> (hold))
+
+# WHY DOES NOT WORK <<< TODO
+G((garbage_recognized & !hold & k3) -> X (k3))
+
+
+
+
+G((l3 & !(k1) & !(k3) & !(e2) & !(h2) & !(e1)) | (h2 & !(l3) & !(k1) & !(k3) & !(e2) & !(e1)) | (e2 & !(l3) & !(k1) & !(k3) & !(h2) & !(e1)) | (e1 & !(l3) & !(k1) & !(k3) & !(e2) & !(h2)) | (k1 & !(l3) & !(k3) & !(e2) & !(h2) & !(e1)) | (k3 & !(l3) & !(k1) & !(e2) & !(h2) & !(e1)))
+
+G(((l3) -> (X((k1 | l3 | h2)))))
+G(((k1) -> (X((k1 | l3 | k3)))))
+G(((k3) -> (X((k3 | k1)))))
+G(((e2) -> (X((h2 | e2 | e1)))))
+G(((e1) -> (X((e2 | e1)))))
+G(((h2) -> (X((l3 | h2 | e2)))))
+
+**INPUTS**
+
+garbage_recognized
+
+**OUTPUTS**
+
+hold, drop, l3, k1, h2, k3, e2, e1
+
+**END**

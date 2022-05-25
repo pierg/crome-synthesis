@@ -1,0 +1,25 @@
+States          	 S0, S1, S2, S3, S4, S5, S6, S7, S8, S9, S10, S11, S12
+Inital State    	 S0
+Input  Alphabet 	 breakfast_ready
+Output Alphabet 	 hold, serve_breakfast, l4, k3, h2, h1, l3, l6, b2, k1, k2, l5, l1, l2, r1
+
+true_ins         s    s'    true_outs
+---------------  ---  ----  ------------------
+                 S0   S1    k1
+breakfast_ready  S0   S2    k3
+-                S1   S3    k2
+                 S2   S1    k1
+breakfast_ready  S2   S4    hold k1
+                 S3   S5    k1
+breakfast_ready  S3   S6    hold k1
+                 S4   S7    hold k2
+-                S5   S8    l3
+                 S6   S9    hold l3
+                 S7   S6    hold k1
+-                S8   S10   hold l2
+                 S9   S10   hold l2
+                 S10  S11   serve_breakfast l3
+                 S11  S1    k1
+breakfast_ready  S11  S12   l3
+                 S12  S1    k1
+breakfast_ready  S12  S4    hold k1

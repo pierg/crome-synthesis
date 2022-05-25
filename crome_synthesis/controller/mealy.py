@@ -81,10 +81,10 @@ class Mealy:
 
     @classmethod
     def from_pydotgraph(
-        cls,
-        graph: Dot,
-        input_aps: dict[str, AtomValues],
-        output_aps: dict[str, AtomValues],
+            cls,
+            graph: Dot,
+            input_aps: dict[str, AtomValues],
+            output_aps: dict[str, AtomValues],
     ):
         states: dict[str, State] = dict()
 
@@ -145,10 +145,10 @@ class Mealy:
 
     def __str__(self):
         output = (
-            f"States          \t {', '.join([s.name for s in self.states])}"
-            + f"\nInital State    \t {self.initial_state.name}"
-            + f"\nInput  Alphabet \t {', '.join([str(x) for x in self.input_alphabet])}"
-            + f"\nOutput Alphabet \t {', '.join([str(x) for x in self.output_alphabet])}\n\n"
+                f"States          \t {', '.join([s.name for s in self.states])}"
+                + f"\nInital State    \t {self.initial_state.name}"
+                + f"\nInput  Alphabet \t {', '.join([str(x) for x in self.input_alphabet])}"
+                + f"\nOutput Alphabet \t {', '.join([str(x) for x in self.output_alphabet])}\n\n"
         )
 
         headers = ["ins", "s", "s'", "outs"]
@@ -157,10 +157,10 @@ class Mealy:
             for inputs, alternatives in state.transitions.items():
                 for (next_state, outputs) in alternatives:
                     line = []
-                    line.append(str(inputs))
+                    line.append(inputs.str_positive_only)
                     line.append(state.name)
                     line.append(next_state.name)
-                    line.append(str(outputs))
+                    line.append(outputs.str_positive_only)
                     entries.append(line)
 
         output += tabulate(entries, headers=headers)

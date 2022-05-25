@@ -1,0 +1,55 @@
+# SCENARIO 4 SERVING BREAKFAST
+# - only works when breakfast_ready is in k1
+# - it should go to k1, take the breakfast and serve it
+
+**ASSUMPTIONS**
+
+# RULE if the robot has the object, then disable the sensor for new objects
+G(hold -> X(!breakfast_ready))
+
+#G(!k1 <-> X !(breakfast_ready))
+
+
+**GUARANTEES**
+
+# patrol living room
+G(F(l2)) & G(F(k1))
+
+# serve_breakfast objects only at the table
+G(l2 <-> X serve_breakfast)
+
+# GOAL
+G((breakfast_ready & !hold & k1) -> X(k1))
+
+
+
+# RULE keep robots with free hands
+G(F(!hold))
+
+# RULE keep holding unless the robot serve_breakfasts
+G((hold & X !serve_breakfast) -> X(hold))
+
+# RULE if it serve_breakfasts the object then it does not hold anymore
+G((serve_breakfast) -> X(!hold))
+
+# RULE if it wants to serve_breakfasts then it is holding an object
+G(X serve_breakfast -> (hold))
+
+
+
+G((k1 & !(l3) & !(l2)) | (l3 & !(k1) & !(l2)) | (l2 & !(k1) & !(l3)))
+
+G(((l2) -> (X((l3 | l2)))))
+G(((k1) -> (X((k1 | l3)))))
+G(((l3) -> (X((k1 | l3 | l2)))))
+
+
+**INPUTS**
+
+breakfast_ready
+
+**OUTPUTS**
+
+hold, serve_breakfast, k1, l3, l2
+
+**END**

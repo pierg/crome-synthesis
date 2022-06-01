@@ -143,6 +143,9 @@ class Mealy:
 
         return tabulate(history, headers=headers)
 
+    def __hash__(self):
+        return hash(self.__str__())
+
     def __str__(self):
         output = (
                 f"States          \t {', '.join([s.name for s in self.states])}"

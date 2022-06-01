@@ -6,8 +6,7 @@ import spot
 from pygraphviz import AGraph
 
 from crome_logic.specification.temporal import LTL
-from crome_logic.tools.atomic_propositions import extract_ap
-from crome_logic.typelement.basic import Boolean, BooleanUncontrollable, BooleanControllable
+from crome_logic.typelement.basic import BooleanUncontrollable, BooleanControllable
 from crome_logic.typeset import Typeset
 from crome_synthesis.atom import AtomValues
 from crome_synthesis.controller.controller_info import ControllerInfo
@@ -65,11 +64,9 @@ class Controller:
         print(self.mealy)
 
     @classmethod
-    def from_ltl(cls, assumptions: LTL, guarantees: LTL):
+    def from_ltl(cls, guarantees: LTL, assumptions: LTL | None = None, name: str = ""):
         if assumptions is None:
             assumptions = LTL("TRUE")
-        if guarantees is None:
-            guarantees = LTL("TRUE")
         if not isinstance(assumptions, LTL) or not isinstance(
                 guarantees, LTL
         ):
@@ -77,17 +74,23 @@ class Controller:
 
         info = ControllerInfo.from_ltl(assumptions, guarantees)
         typeset = (assumptions.typeset_complete + guarantees.typeset_complete).get_sub_typeset(formula=info.formula)
-        return cls(info=info, _typeset=typeset)
+        return cls(name=name, info=info, _typeset=typeset)
 
     @classmethod
-    def from_file(cls, file_path: Path):
+    def from_file(cls, file_path: Path, name: str = ""):
         info = ControllerInfo.from_file(file_path)
-        return cls(info=info)
+        return cls(name=name, info=info)
 
+    def __hash__(self):
+        return hash(self.mealy.__hash__() + self.info.__hash__())
 
     @property
     def realizable(self) -> bool:
         return self._realizable
+
+    @property
+    def synth_time(self) -> float:
+        return self._synth_time
 
     @property
     def typeset(self) -> Typeset:

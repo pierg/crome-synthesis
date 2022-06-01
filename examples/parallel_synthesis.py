@@ -14,17 +14,17 @@ def robot() -> None:
 
     spec = g
 
-    c_spec = Controller(guarantees=spec, name="spec_top")
+    c_spec = Controller.from_ltl(guarantees=spec)
     c_spec.save(format="pdf")
     print(c_spec.mealy)
-
-    print("\n\n")
     for i, s in enumerate(spec.cnf.to_set):
         c_s = Controller(guarantees=s, name=f"spec_{i}")
         c_s.save(format="pdf")
         save_to_file(str(s), file_name=f"spec_{i}")
         print(c_s.mealy)
         print("\n\n")
+    print("\n\n")
+
 
 
 

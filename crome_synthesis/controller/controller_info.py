@@ -157,6 +157,9 @@ class ControllerInfo:
 
         return a, g, i, o
 
+    def __hash__(self):
+        return hash(self.formula)
+
     @property
     def to_str(self) -> str:
         ret = ""

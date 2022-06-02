@@ -1,0 +1,20 @@
+**ASSUMPTIONS**
+
+1
+
+
+**GUARANTEES**
+
+G(e1 <-> Xdrop) | ! G(hold -> X! garbage_recognized) | ! G(! k3 -> X! garbage_recognized)
+
+
+**INPUTS**
+
+garbage_recognized
+
+**OUTPUTS**
+
+drop, k3, hold, e1
+
+**END**
+

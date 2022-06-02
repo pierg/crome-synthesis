@@ -11,6 +11,7 @@ from crome_synthesis.controller.tools import strix_syntax_fix
 
 match_LTL_no_spaces = r"((?<=[G|F|X])(?=[^\s]))|((?<=[U])(?=[a-z]))|(?=[U])+(?<=[a-z])"
 
+NAME_HEADER = "**NAME**"
 ASSUMPTIONS_HEADER = "**ASSUMPTIONS**"
 GUARANTEES_HEADER = "**GUARANTEES**"
 INS_HEADER = "**INPUTS**"
@@ -109,6 +110,9 @@ class ControllerInfo:
                             return cls(a, g, i, o)
                         else:
                             Exception("File format not supported")
+                    elif NAME_HEADER == line:
+                        continue
+
                     else:
                         raise Exception("Unexpected File Header: " + line)
 

@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import random
 from dataclasses import dataclass, field
-from typing import Iterable
+from typing import Iterable, Any
 
 from pydot import Dot
 from tabulate import tabulate
@@ -143,13 +143,36 @@ class Mealy:
 
         return tabulate(history, headers=headers)
 
+    def export_to_json(self) -> list[dict[str, Any]]:
+        json_content = []
+        for state in self.states:
+            data = {"name": state.name, "transition": []}
+            for inputs, alternatives in state.transitions.items():
+                for (next_state, outputs) in alternatives:
+                    list_input = inputs.str_positive_only.split(" ")
+                    list_output = outputs.str_positive_only.split(" ")
+                    for elt in list_output:
+                        if elt == '':
+                            list_output.remove(elt)
+                    for elt in list_input:
+                        if elt == '':
+                            list_input.remove(elt)
+
+                    line = {"next_state": next_state.name,
+                            "inputs": ",".join(list_input),
+                            "outputs": ", ".join(list_output)}
+                    data["transition"].append(line)
+
+            json_content.append(data)
+        return json_content
+
     def __hash__(self):
         return hash(self.__str__())
 
     def __str__(self):
         output = (
                 f"States          \t {', '.join([s.name for s in self.states])}"
-                + f"\nInital State    \t {self.initial_state.name}"
+                + f"\nInitial State    \t {self.initial_state.name}"
                 + f"\nInput  Alphabet \t {', '.join([str(x) for x in self.input_alphabet])}"
                 + f"\nOutput Alphabet \t {', '.join([str(x) for x in self.output_alphabet])}\n\n"
         )

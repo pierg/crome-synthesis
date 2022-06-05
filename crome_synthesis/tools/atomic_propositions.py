@@ -6,9 +6,8 @@ from crome_synthesis.atom import Atoms, AtomValues
 
 
 def extract_in_out_atomic_propositions(
-    inputs_types: set[Boolean], output_types: set[Boolean]
+        inputs_types: set[Boolean], output_types: set[Boolean]
 ) -> tuple[dict[str, AtomValues], dict[str, AtomValues]]:
-
     input_aps: dict[str, AtomValues] = {}
     output_aps: dict[str, AtomValues] = {}
 
@@ -22,17 +21,14 @@ def extract_in_out_atomic_propositions(
 
 
 def extract_transitions(
-    formula: str, input_aps: dict[str, AtomValues], output_aps: dict[str, AtomValues]
+        formula: str, input_aps: dict[str, AtomValues], output_aps: dict[str, AtomValues]
 ) -> set[tuple[Atoms, Atoms]]:
-
     alternatives: set[tuple[Atoms, Atoms]] = set()
 
     if pyeda_syntax_fix(formula) == "1":
-        return alternatives
-
+        return {(Atoms.any(), Atoms.any())}
 
     boolean = Bool(formula)
-
 
     for clause in boolean.dnf.clauses:
 

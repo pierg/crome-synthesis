@@ -1,6 +1,6 @@
 import os, sys
 
-from tools.persistence import Persistence
+from crome_synthesis.tools.persistence import load_controller
 
 path = os.path.abspath(os.path.dirname(__file__))
 
@@ -8,13 +8,21 @@ path = os.path.abspath(os.path.dirname(__file__))
 if len(sys.argv) > 1:
     controller_name = sys.argv[1]
 else:
-    controller_name = "0"
+    controller_name = "5"
 
 print(f"controller selected: {path}/controller_specs/{controller_name}.txt")
 
-controller = Persistence.load_controller(folder_path=f"{path}/controller_specs", name=controller_name)
+c = load_controller(controller_name=controller_name)
+# print(c.mealy)
 
-print(controller)
-run = controller.simulate()
-print(run)
+c.save("pdf")
+print(c.mealy)
+tab = c.simulate()
+print(tab)
+#
+# controller = Persistence.load_controller(folder_path=f"{path}/controller_specs", name=controller_name)
+#
+# print(controller)
+# run = controller.simulate()
+# print(run)
 

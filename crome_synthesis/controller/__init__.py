@@ -31,7 +31,8 @@ class Controller:
     )
 
     _realizable: bool = field(init=False, repr=False, default=False)
-    _automaton: spot.twa | None = field(init=False, repr=False, default=None)
+    _automaton: str | None = field(init=False, repr=False, default=None)
+    _spot_automaton: spot.twa | None = field(init=False, repr=False, default=None)
     _synth_time: float = field(init=False, repr=False, default=-1)
 
     _pydotgraph: pydot.Dot | None = field(init=False, repr=False, default=None)
@@ -56,7 +57,9 @@ class Controller:
         a, g, i, o = self.info.to_strix
         self._realizable, self._automaton, self._synth_time = self.generate_from_spec(a, g, i, o)
 
-        self._pydotgraph = pydot.graph_from_dot_data(self._automaton.to_str("dot"))[0]
+        self._spot_automaton = spot.automaton(self._automaton)
+
+        self._pydotgraph = pydot.graph_from_dot_data(self._spot_automaton.to_str("dot"))[0]
         self._mealy = Mealy.from_pydotgraph(
             self._pydotgraph, input_aps=self.input_aps, output_aps=self.output_aps
         )
@@ -124,9 +127,14 @@ class Controller:
     def mealy(self) -> Mealy:
         return self._mealy
 
+    def simulate(self, steps: int = 50):
+        """Simulate a run of 50 steps."""
+
+        return self.mealy.simulate(steps)
+
     def generate_from_spec(
             self, a: str, g: str, i: str, o: str
-    ) -> tuple[bool, spot.twa, float]:
+    ) -> tuple[bool, str, float]:
 
         print(
             f"Generating controller for the formula:\n({a}) -> ({g})\ninputs:\t\t{i}\noutputs:\t{o}"
@@ -139,18 +147,31 @@ class Controller:
         else:
             print(f"The formula is NOT REALIZABLE")
 
-        return realizable, spot.automaton(automaton), synth_time
+        return realizable, automaton, synth_time
 
     def save(self, format: str = "hoa"):
         file_name = f"ctrl_{self.name}.{format}"
         if format in ["png", "eps", "pdf"]:
-            graph = AGraph(string=self._automaton.to_str("dot"))
-            graph.layout()
-            graph.draw(path=output_folder_synthesis / file_name, format=format)
+            (graph,) = pydot.graph_from_dot_data(self._spot_automaton.to_str("dot"))
+            graph.write_png(output_folder_synthesis / file_name)
             print(f"{file_name} saved in {output_folder_synthesis}")
-
+        elif format in ["eps", "pdf"]:
+            (graph,) = pydot.graph_from_dot_data(self._spot_automaton.to_str("dot"))
+            graph.imsave(fname=output_folder_synthesis / file_name, format=format)
+            print(f"{file_name} saved in {output_folder_synthesis}")
         elif format in ["hoa", "dot", "spin", "lbtt"]:
             file_path = save_to_file(
-                file_content=self._automaton.to_str(format), file_name=file_name
+                file_content=self._spot_automaton.to_str(format), file_name=file_name
             )
             print(f"{file_path} generated")
+
+    def __getstate__(self):
+        state = self.__dict__.copy()
+        print(state.keys())
+        del state["_spot_automaton"]
+        return state
+
+    def __setstate__(self, state):
+        self.__dict__.update(state)
+        self._spot_automaton = spot.automaton(self._automaton)
+        object.__setattr__(self, "_spot_automaton", spot.automaton(self._automaton))

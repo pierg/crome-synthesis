@@ -33,8 +33,14 @@ class Atom:
                 return False
         return True
 
+    @property
+    def is_any(self):
+        return self.typelement.name == "TRUE"
+
     def __str__(self):
-        if self.value == Val.false:
+        if self.is_any:
+            return f"-"
+        elif self.value == Val.false:
             return f"{self.typelement.name}!"
         elif self.value == Val.undefined:
             return f"{self.typelement.name}?"
@@ -55,9 +61,13 @@ class Atoms:
     def determinize_from(self, other: Atoms):
         pass
 
+    @classmethod
+    def any(cls):
+        return Atoms(frozenset({Atom(Boolean(name="TRUE"))}))
+
     @property
     def str_positive_only(self):
-        return " ".join([str(a) for a in list(filter(lambda a: a.value == Val.true, self.atoms))])
+        return " ".join([str(a) for a in list(filter(lambda a: a.value == Val.true or a.is_any, self.atoms))])
 
     def __str__(self):
         return " ".join([str(a) for a in self.atoms])

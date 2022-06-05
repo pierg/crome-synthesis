@@ -139,7 +139,7 @@ class Mealy:
         for i in range(steps):
             inputs = random.choice(list(self.current_state.transitions.keys()))
             outputs = self.react(inputs)
-            history.append([i, str(inputs), str(outputs)])
+            history.append([i, str(inputs.str_positive_only), str(outputs.str_positive_only)])
 
         return tabulate(history, headers=headers)
 

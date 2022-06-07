@@ -132,7 +132,7 @@ class Mealy:
     def reset(self):
         object.__setattr__(self, "current_state", self.initial_state)
 
-    def simulate(self, steps: int = 50):
+    def simulate(self, steps: int = 50, do_print: bool = True):
         headers = ["t", "inputs", "outputs"]
         history: list[list[str]] = []
 
@@ -140,8 +140,10 @@ class Mealy:
             inputs = random.choice(list(self.current_state.transitions.keys()))
             outputs = self.react(inputs)
             history.append([i, str(inputs.str_positive_only), str(outputs.str_positive_only)])
-
-        return tabulate(history, headers=headers)
+        if do_print:
+            return tabulate(history, headers=headers)
+        else:
+            return history
 
     def export_to_json(self) -> list[dict[str, Any]]:
         json_content = []

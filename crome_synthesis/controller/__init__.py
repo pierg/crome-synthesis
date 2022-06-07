@@ -52,7 +52,6 @@ class Controller:
         file_path = save_to_file(
             file_content=self.info.to_str, file_name="controller", absolute_folder_path=output_folder_synthesis
         )
-        print(file_path)
 
         a, g, i, o = self.info.to_strix
         self._realizable, self._automaton, self._synth_time = self.generate_from_spec(a, g, i, o)
@@ -63,8 +62,6 @@ class Controller:
         self._mealy = Mealy.from_pydotgraph(
             self._pydotgraph, input_aps=self.input_aps, output_aps=self.output_aps
         )
-        print(self.mealy)
-        print(self.mealy)
 
     @classmethod
     def from_ltl(cls, guarantees: LTL, assumptions: LTL | None = None, name: str = ""):

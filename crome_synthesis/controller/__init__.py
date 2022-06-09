@@ -136,6 +136,12 @@ class Controller:
 
         return realizable, automaton, synth_time
 
+    def get_format(self, format: str = "dot") -> str:
+        if format in ["hoa", "dot", "spin", "lbtt"]:
+            return self._spot_automaton.to_str(format)
+        else:
+            raise Exception(f"Format {format} is not supported")
+
     def save(self, format: str = "hoa", file_name: str = "", absolute_folder_path: Path = output_folder_synthesis):
         if file_name == "":
             file_name = f"{self.name}.{format}"

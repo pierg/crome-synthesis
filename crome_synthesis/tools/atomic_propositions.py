@@ -8,6 +8,7 @@ from crome_synthesis.atom import Atoms, AtomValues
 def extract_in_out_atomic_propositions(
         inputs_types: set[Boolean], output_types: set[Boolean]
 ) -> tuple[dict[str, AtomValues], dict[str, AtomValues]]:
+    
     input_aps: dict[str, AtomValues] = {}
     output_aps: dict[str, AtomValues] = {}
 

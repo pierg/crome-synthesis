@@ -3,6 +3,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from enum import Enum, auto
 
+from crome_logic.typelement import TypeKind
 from crome_logic.typelement.basic import Boolean
 
 
@@ -61,16 +62,28 @@ class Atoms:
     def determinize_from(self, other: Atoms):
         pass
 
+    @property
+    def sorted(self) -> list[Atom]:
+        data = list(self.atoms)
+        if len(data) > 1:
+            data_names = sorted([str(a) for a in data[1:]])
+            data = [a for a in list(filter(lambda a: str(a) in data_names, self.atoms))]
+
+        for i, a in enumerate(data):
+            if a.typelement.kind == TypeKind.LOCATION and a.value == Val.true:
+                data.insert(0, data.pop(i))
+        return data
+
     @classmethod
     def any(cls):
         return Atoms(frozenset({Atom(Boolean(name="TRUE"))}))
 
     @property
     def str_positive_only(self):
-        return " ".join([str(a) for a in list(filter(lambda a: a.value == Val.true or a.is_any, self.atoms))])
+        return " ".join([str(a) for a in list(filter(lambda a: a.value == Val.true or a.is_any, self.sorted))])
 
     def __str__(self):
-        return " ".join([str(a) for a in self.atoms])
+        return " ".join([str(a) for a in self.sorted])
 
     def __hash__(self):
         return hash(self.atoms)

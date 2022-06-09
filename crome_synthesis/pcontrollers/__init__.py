@@ -6,7 +6,7 @@ from crome_logic.specification.temporal import LTL
 from crome_logic.typelement.basic import BooleanUncontrollable, BooleanControllable
 from crome_logic.typeset import Typeset
 from crome_synthesis.controller import Controller
-from crome_synthesis.controller.controller_info import ControllerInfo, _check_header
+from crome_synthesis.controller.controller_info import ControllerSpec, _check_header
 
 
 @dataclass
@@ -35,7 +35,7 @@ class PControllers:
 
     @classmethod
     def from_file(cls, file_path: Path, name: str = ""):
-        info = ControllerInfo.from_file(file_path)
+        info = ControllerSpec.from_file(file_path)
         if not name:
             with open(file_path, 'r') as ifile:
                 name_found = False

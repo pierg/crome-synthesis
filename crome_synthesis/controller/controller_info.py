@@ -2,10 +2,12 @@ import itertools
 from dataclasses import dataclass, field
 from pathlib import Path
 
+from crome_cgg.world import World
 from crome_logic.specification import and_
 from crome_logic.specification.rules_extractors import extract_mutex_rules, extract_adjacency_rules
 from crome_logic.specification.string_logic import implies_
 from crome_logic.specification.temporal import LTL
+from crome_logic.typelement.basic import BooleanUncontrollable, BooleanControllable
 from crome_logic.typeset import Typeset
 from crome_synthesis.controller.tools import strix_syntax_fix
 
@@ -22,7 +24,7 @@ DATA_INDENT = 0
 
 
 @dataclass
-class ControllerInfo:
+class ControllerSpec:
     a: list[str]
     g: list[str]
     i: list[str]
@@ -31,32 +33,63 @@ class ControllerInfo:
     a_adj: list[str] = field(default_factory=list)
     g_mtx: list[str] = field(default_factory=list)
     g_adj: list[str] = field(default_factory=list)
+    a_rules: list[tuple[str]] = field(default_factory=list)
+    g_rules: list[tuple[str]] = field(default_factory=list)
 
-    _typeset: dict | None = field(init=False, repr=False)
+    _typeset: Typeset | None = None
+
+    def __post_init__(self):
+        if self._typeset is None:
+            set_ap_i = set(map(lambda x: BooleanUncontrollable(name=x), self.i))
+            set_ap_o = set(map(lambda x: BooleanControllable(name=x), self.o))
+            self._typeset = Typeset(set_ap_i | set_ap_o)
 
     @classmethod
-    def from_ltl(cls, assumptions: LTL, guarantees: LTL):
+    def from_ltl(cls, assumptions: LTL, guarantees: LTL, world: World | None = None):
         typeset = Typeset.from_typesets([assumptions.typeset, guarantees.typeset])
 
-        # a_ref, t = extract_refinement_rules(assumptions.typeset, output_list=True)
-        # typeset += t
-        a_mtx, t = extract_mutex_rules(assumptions.typeset, output_list=True)
-        typeset += t
-        a_adj, t = extract_adjacency_rules(assumptions.typeset, output_list=True)
-        typeset += t
-        a = [str(assumptions)]
-        #
-        # g_ref, t = extract_refinement_rules(guarantees.typeset, output_list=True)
-        # typeset += t
-        g_mtx, t = extract_mutex_rules(guarantees.typeset, output_list=True)
-        typeset += t
-        g_adj, t = extract_adjacency_rules(guarantees.typeset, output_list=True)
-        typeset += t
-        g = [str(guarantees)]
+        a_rules = []
+        g_rules = []
+
+        if world is not None:
+            typeset = assumptions.typeset + guarantees.typeset + world.typeset
+            typeset_c, typeset_u = typeset.split_controllable_uncontrollable
+            a_mtx, t = extract_mutex_rules(typeset_u, output_list=True)
+            typeset += t
+            a_adj, t = extract_adjacency_rules(typeset_u, output_list=True)
+            typeset += t
+            g_mtx, t = extract_mutex_rules(typeset_c, output_list=True)
+            typeset += t
+            g_adj, t = extract_adjacency_rules(typeset_c, output_list=True)
+            typeset += t
+            a_rules, t = world.get_rules(environment=True)
+            typeset += t
+            g_rules, t = world.get_rules(environment=False)
+            typeset += t
+        else:
+            # a_ref, t = extract_refinement_rules(assumptions.typeset, output_list=True)
+            # typeset += t
+            a_mtx, t = extract_mutex_rules(assumptions.typeset, output_list=True)
+            typeset += t
+            a_adj, t = extract_adjacency_rules(assumptions.typeset, output_list=True)
+            typeset += t
+            # g_ref, t = extract_refinement_rules(guarantees.typeset, output_list=True)
+            # typeset += t
+            g_mtx, t = extract_mutex_rules(guarantees.typeset, output_list=True)
+            typeset += t
+            g_adj, t = extract_adjacency_rules(guarantees.typeset, output_list=True)
+            typeset += t
+
+        a = []
+        if not assumptions.is_true_expression:
+            a = [str(assumptions)]
+        g = []
+        if not guarantees.is_true_expression:
+            g = [str(guarantees)]
 
         i, o = typeset.extract_inputs_outputs(string=True)
 
-        return cls(a, g, i, o, a_mtx, a_adj, g_mtx, g_adj)
+        return cls(a, g, i, o, a_mtx, a_adj, g_mtx, g_adj, a_rules, g_rules, typeset)
 
     @classmethod
     def from_file(cls, file_path: Path):
@@ -139,11 +172,17 @@ class ControllerInfo:
 
 
     @property
+    def typeset(self) -> Typeset:
+        return self._typeset
+
+
+    @property
     def to_strix(self) -> tuple[str, str, str, str]:
         a = and_(list(itertools.chain(
             self.a,
             self.a_adj,
             self.a_mtx,
+            [r[0] for r in self.a_rules]
         )))
 
         a = strix_syntax_fix(a)
@@ -152,6 +191,7 @@ class ControllerInfo:
             self.g,
             self.g_adj,
             self.g_mtx,
+            [r[0] for r in self.g_rules]
         )))
 
         g = strix_syntax_fix(g)
@@ -169,14 +209,28 @@ class ControllerInfo:
         ret = ""
         ret += f"{ASSUMPTIONS_HEADER}\n\n"
         ret += _ltl_list_to_string(self.a)
+        if len(self.a_mtx) > 0:
+            ret += f"\n\n# MUTEX RULES\n"
         ret += _ltl_list_to_string(self.a_mtx)
+        if len(self.a_adj) > 0:
+            ret += f"\n# ADJACENCY RULES\n"
         ret += _ltl_list_to_string(self.a_adj)
+        if len(self.a_rules) > 0:
+            ret += f"\n# ENVIRONMENT RULES\n"
+        ret += _ltl_list_to_string(self.a_rules)
 
         ret += f"\n\n{GUARANTEES_HEADER}\n\n"
 
         ret += _ltl_list_to_string(self.g)
+        if len(self.g_mtx) > 0:
+            ret += f"\n\n# MUTEX RULES\n"
         ret += _ltl_list_to_string(self.g_mtx)
+        if len(self.g_adj) > 0:
+            ret += f"\n# ADJACENCY RULES\n"
         ret += _ltl_list_to_string(self.g_adj)
+        if len(self.g_rules) > 0:
+            ret += f"\n# SYSTEM RULES\n"
+        ret += _ltl_list_to_string(self.g_rules)
 
         ret += f"\n\n{INS_HEADER}\n\n"
         ret += "\t" * DATA_INDENT + ", ".join(self.i)
@@ -189,13 +243,21 @@ class ControllerInfo:
         return ret
 
 
-def _ltl_list_to_string(ltl_list: list[str]) -> str:
+def _ltl_list_to_string(ltl_list: list[str] | list[tuple[str, str]]) -> str:
     ret = ""
     if len(ltl_list) > 0:
         for p in ltl_list:
-            ret += (
-                    "\t" * DATA_INDENT + strix_syntax_fix(p) + "\n"
-            )
+            if isinstance(p, tuple):
+                ret += (
+                        "\t" * DATA_INDENT + "# " + strix_syntax_fix(p[1]) + "\n"
+                )
+                ret += (
+                        "\t" * DATA_INDENT + strix_syntax_fix(p[0]) + "\n\n"
+                )
+            else:
+                ret += (
+                        "\t" * DATA_INDENT + strix_syntax_fix(p) + "\n"
+                )
     return ret
 
 

@@ -3,13 +3,12 @@ from pathlib import Path
 
 import pydot
 import spot
-from pygraphviz import AGraph
 
 from crome_logic.specification.temporal import LTL
 from crome_logic.typelement.basic import BooleanUncontrollable, BooleanControllable
 from crome_logic.typeset import Typeset
 from crome_synthesis.atom import AtomValues
-from crome_synthesis.controller.controller_info import ControllerInfo, _check_header
+from crome_synthesis.controller.controller_info import ControllerSpec, _check_header
 from crome_synthesis.controller.mealy import Mealy
 from crome_synthesis.controller.synthesis import generate_controller
 from crome_synthesis.tools import output_folder_synthesis
@@ -20,7 +19,7 @@ from crome_synthesis.tools.crome_io import save_to_file
 @dataclass
 class Controller:
     name: str = ""
-    info: ControllerInfo = None
+    spec: ControllerSpec = None
 
     _typeset: Typeset | None = field(repr=False, default=None)
     _input_aps: dict[str, AtomValues] | None = field(
@@ -40,21 +39,11 @@ class Controller:
 
     def __post_init__(self):
 
-        if self._typeset is None:
-            set_ap_i = set(map(lambda x: BooleanUncontrollable(name=x), self.info.i))
-            set_ap_o = set(map(lambda x: BooleanControllable(name=x), self.info.o))
-            self._typeset = Typeset(set_ap_i | set_ap_o)
-
         i, o = self.typeset.extract_inputs_outputs()
 
         self._input_aps, self._output_aps = extract_in_out_atomic_propositions(i, o)
 
-        file_path = save_to_file(
-            file_content=self.info.to_str, file_name="controller", absolute_folder_path=output_folder_synthesis
-        )
-        print(file_path)
-
-        a, g, i, o = self.info.to_strix
+        a, g, i, o = self.spec.to_strix
         self._realizable, self._automaton, self._synth_time = self.generate_from_spec(a, g, i, o)
 
         self._spot_automaton = spot.automaton(self._automaton)
@@ -63,8 +52,6 @@ class Controller:
         self._mealy = Mealy.from_pydotgraph(
             self._pydotgraph, input_aps=self.input_aps, output_aps=self.output_aps
         )
-        print(self.mealy)
-        print(self.mealy)
 
     @classmethod
     def from_ltl(cls, guarantees: LTL, assumptions: LTL | None = None, name: str = ""):
@@ -75,13 +62,13 @@ class Controller:
         ):
             raise AttributeError
 
-        info = ControllerInfo.from_ltl(assumptions, guarantees)
+        info = ControllerSpec.from_ltl(assumptions, guarantees)
         typeset = (assumptions.typeset_complete + guarantees.typeset_complete).get_sub_typeset(formula=info.formula)
-        return cls(name=name, info=info, _typeset=typeset)
+        return cls(name=name, spec=info, _typeset=typeset)
 
     @classmethod
     def from_file(cls, file_path: Path, name: str = ""):
-        info = ControllerInfo.from_file(file_path)
+        info = ControllerSpec.from_file(file_path)
         if not name:
             with open(file_path, 'r') as ifile:
                 name_found = False
@@ -98,10 +85,10 @@ class Controller:
                         if line == "**NAME**":
                             name_found = True
 
-        return cls(name=name, info=info)
+        return cls(name=name, spec=info)
 
     def __hash__(self):
-        return hash(self.mealy.__hash__() + self.info.__hash__())
+        return hash(self.mealy.__hash__() + self.spec.__hash__())
 
     @property
     def realizable(self) -> bool:
@@ -113,7 +100,7 @@ class Controller:
 
     @property
     def typeset(self) -> Typeset:
-        return self._typeset
+        return self.spec.typeset
 
     @property
     def input_aps(self) -> dict[str, AtomValues]:
@@ -149,19 +136,23 @@ class Controller:
 
         return realizable, automaton, synth_time
 
-    def save(self, format: str = "hoa"):
-        file_name = f"ctrl_{self.name}.{format}"
+    def save(self, format: str = "hoa", file_name: str = "", absolute_folder_path: Path = output_folder_synthesis):
+        if file_name == "":
+            file_name = f"{self.name}.{format}"
+        else:
+            file_name = f"{file_name}.{format}"
         if format in ["png", "eps", "pdf"]:
             (graph,) = pydot.graph_from_dot_data(self._spot_automaton.to_str("dot"))
-            graph.write_png(output_folder_synthesis / file_name)
+            graph.write_png(absolute_folder_path / file_name)
             print(f"{file_name} saved in {output_folder_synthesis}")
         elif format in ["eps", "pdf"]:
             (graph,) = pydot.graph_from_dot_data(self._spot_automaton.to_str("dot"))
-            graph.imsave(fname=output_folder_synthesis / file_name, format=format)
+            graph.imsave(fname=absolute_folder_path / file_name, format=format)
             print(f"{file_name} saved in {output_folder_synthesis}")
         elif format in ["hoa", "dot", "spin", "lbtt"]:
             file_path = save_to_file(
-                file_content=self._spot_automaton.to_str(format), file_name=file_name
+                file_content=self._spot_automaton.to_str(format), file_name=file_name,
+                absolute_folder_path=absolute_folder_path
             )
             print(f"{file_path} generated")
 

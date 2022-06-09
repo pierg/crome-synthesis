@@ -11,7 +11,7 @@ specs_path = Path(os.path.abspath(os.path.dirname(__file__))) / "controller_spec
 if len(sys.argv) > 1:
     controller_name = sys.argv[1]
 else:
-    controller_name = "test_controller"
+    controller_name = "6"
 
 controller_path = specs_path / f"{controller_name}.txt"
 
@@ -20,13 +20,12 @@ print(f"controller selected: {controller_path}")
 
 # METHOD 1: MONOLITHIC SYNTHESIS FROM STRIX
 controller = Controller.from_file(file_path=controller_path, name=controller_name)
-print(controller.name)
 print(controller.mealy)
-dump_controller(controller)
+print(controller.mealy.simulate(20))
 
 
-
-# # METHOD 2: DISTRIBUTED SYNTHESIS WITH CROME
+#
+# # METHOD 2: PARALLEL SYNTHESIS WITH CROME
 # pcontrollers = PControllers.from_file(file_path=controller_path, name=controller_name)
 # for controller in pcontrollers.controllers:
 #     print(controller.name)

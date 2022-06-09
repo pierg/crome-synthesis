@@ -3,6 +3,7 @@ from pathlib import Path
 
 import pydot
 import spot
+from spot import twa
 
 from crome_logic.specification.temporal import LTL
 from crome_logic.typelement.basic import BooleanUncontrollable, BooleanControllable
@@ -113,6 +114,10 @@ class Controller:
     @property
     def mealy(self) -> Mealy:
         return self._mealy
+
+    @property
+    def spot_automaton(self) -> twa | None:
+        return self._spot_automaton
 
     def simulate(self, steps: int = 50):
         """Simulate a run of 50 steps."""

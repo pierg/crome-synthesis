@@ -16,6 +16,9 @@ class PControllers:
 
     _synth_time: float = field(init=False, default_factory=float)
 
+    def __post_init__(self):
+        self.name = f"{self.name}_p"
+
     @classmethod
     def from_ltl(cls, guarantees: LTL, assumptions: LTL | None = None, name: str = ""):
         if assumptions is None:

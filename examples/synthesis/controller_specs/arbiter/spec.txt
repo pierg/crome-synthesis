@@ -1,0 +1,27 @@
+**NAME**
+
+Prioritized Arbiter n=3
+
+**ASSUMPTIONS**
+
+G F !request_m
+
+**GUARANTEES**
+
+G ((!grant_m & !grant_0) | ((!grant_m | !grant_0) & !grant_1))
+
+G (request_m -> X ((!grant_0 & !grant_1) U grant_m))
+
+G (request_0 -> F grant_0)
+
+G (request_1 -> F grant_1)
+
+**INPUTS**
+
+request_m, request_0, request_1
+
+**OUTPUTS**
+
+grant_m, grant_0, grant_1
+
+**END**

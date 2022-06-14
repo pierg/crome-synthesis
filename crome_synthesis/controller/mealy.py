@@ -39,6 +39,10 @@ class State:
     def transitions(self):
         return self._transitions
 
+    @property
+    def possible_inputs(self) -> list[Atoms]:
+        return list(self._transitions.keys())
+
     def add_transition(self, transition: Transition):
         if transition.input in self.transitions.keys():
             self.transitions[transition.input].add(
@@ -66,6 +70,7 @@ class State:
 @dataclass(frozen=True)
 class Mealy:
     states: list[State]
+    transitions: list[Transition]
 
     input_aps: dict[str, AtomValues]
     output_aps: dict[str, AtomValues]
@@ -78,6 +83,9 @@ class Mealy:
             if state.is_initial:
                 object.__setattr__(self, "initial_state", state)
         object.__setattr__(self, "current_state", self.initial_state)
+        print("Mealy Machine Built!")
+        print(f"# STATES:\t{len(self.states)}")
+        print(f"# TRANSITIONS:\t{len(self.transitions)}")
 
     @classmethod
     def from_pydotgraph(
@@ -86,7 +94,9 @@ class Mealy:
             input_aps: dict[str, AtomValues],
             output_aps: dict[str, AtomValues],
     ):
+        print("Building the Mealy machine in progress ...")
         states: dict[str, State] = dict()
+        mealy_transitions: list[Transition] = []
 
         for node in graph.get_nodes():
             try:
@@ -104,9 +114,11 @@ class Mealy:
                 for ins, outs in transitions:
                     source = states[edge.get_source()]
                     destination = states[edge.get_destination()]
-                    source.add_transition(Transition(ins, destination, outs))
+                    new_transition = Transition(ins, destination, outs)
+                    source.add_transition(new_transition)
+                    mealy_transitions.append(new_transition)
         return cls(
-            states=list(states.values()), input_aps=input_aps, output_aps=output_aps
+            states=list(states.values()), transitions=mealy_transitions, input_aps=input_aps, output_aps=output_aps
         )
 
     @property
@@ -133,13 +145,15 @@ class Mealy:
         object.__setattr__(self, "current_state", self.initial_state)
 
     def simulate(self, steps: int = 50, do_print: bool = True):
-        headers = ["t", "inputs", "outputs"]
+        headers = ["t", "inputs", "s", "s'", "outputs"]
         history: list[list[str]] = []
 
         for i in range(steps):
             inputs = random.choice(list(self.current_state.transitions.keys()))
+            curr_state = self.current_state.name
             outputs = self.react(inputs)
-            history.append([i, str(inputs.str_positive_only), str(outputs.str_positive_only)])
+            next_state = self.current_state.name
+            history.append([i, str(inputs.str_positive_only), curr_state, next_state, str(outputs.str_positive_only)])
         if do_print:
             return tabulate(history, headers=headers)
         else:

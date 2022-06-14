@@ -1,10 +1,11 @@
 import os, sys
 
+from keyring.backends.Windows import Persistence
+
 from crome_synthesis.controller import Controller
 from pathlib import Path
 
-from crome_synthesis.pcontrollers import PControllers
-from crome_synthesis.tools.persistence import dump_controller, load_controller
+from crome_synthesis.tools.persistence import dump_controller
 
 specs_path = Path(os.path.abspath(os.path.dirname(__file__))) / "controller_specs"
 
@@ -21,7 +22,11 @@ print(f"controller selected: {controller_path}")
 # METHOD 1: MONOLITHIC SYNTHESIS FROM STRIX
 controller = Controller.from_file(file_path=controller_path, name=controller_name)
 print(controller.mealy)
+c = dump_controller(controller_name=controller_name)
+
+
 print(controller.mealy.simulate(20))
+
 
 
 #

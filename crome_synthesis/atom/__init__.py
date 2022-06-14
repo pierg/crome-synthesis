@@ -38,6 +38,10 @@ class Atom:
     def is_any(self):
         return self.typelement.name == "TRUE"
 
+    @property
+    def name(self) -> str:
+        return self.typelement.name
+
     def __str__(self):
         if self.is_any:
             return f"-"
@@ -65,13 +69,10 @@ class Atoms:
     @property
     def sorted(self) -> list[Atom]:
         data = list(self.atoms)
-        if len(data) > 1:
-            data_names = sorted([str(a) for a in data[1:]])
-            data = [a for a in list(filter(lambda a: str(a) in data_names, self.atoms))]
-
+        data = sorted(data, key=lambda atom: atom.name)
         for i, a in enumerate(data):
             if a.typelement.kind == TypeKind.LOCATION and a.value == Val.true:
-                data.insert(0, data.pop(i))
+                data[0], data[i] = data[i], data[0]
         return data
 
     @classmethod

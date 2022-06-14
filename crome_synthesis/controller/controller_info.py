@@ -2,7 +2,6 @@ import itertools
 from dataclasses import dataclass, field
 from pathlib import Path
 
-from crome_cgg.world import World
 from crome_logic.specification import and_
 from crome_logic.specification.rules_extractors import extract_mutex_rules, extract_adjacency_rules
 from crome_logic.specification.string_logic import implies_
@@ -10,6 +9,7 @@ from crome_logic.specification.temporal import LTL
 from crome_logic.typelement.basic import BooleanUncontrollable, BooleanControllable
 from crome_logic.typeset import Typeset
 from crome_synthesis.controller.tools import strix_syntax_fix
+from crome_synthesis.world import World
 
 match_LTL_no_spaces = r"((?<=[G|F|X])(?=[^\s]))|((?<=[U])(?=[a-z]))|(?=[U])+(?<=[a-z])"
 

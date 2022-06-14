@@ -13,5 +13,4 @@ else:
 print(f"controller selected: {path}/controller_specs/{controller_name}.txt")
 
 c = dump_controller(folder_name=f"{path}/controller_specs/")
-tab = c.simulate()
 print(tab)

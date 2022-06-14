@@ -78,11 +78,16 @@ class Mealy:
     initial_state: State | None = field(init=False, default=None)
     current_state: State | None = field(init=False, default=None)
 
+    _headers: list[list[str]] = field(init=False, default_factory=list)
+    _curr_step: int = field(init=False, default_factory=int)
+    _history: list[list[str]] = field(init=False, default_factory=list)
+
     def __post_init__(self):
         for state in self.states:
             if state.is_initial:
                 object.__setattr__(self, "initial_state", state)
-        object.__setattr__(self, "current_state", self.initial_state)
+        self.reset()
+
         print("Mealy Machine Built!")
         print(f"# STATES:\t{len(self.states)}")
         print(f"# TRANSITIONS:\t{len(self.transitions)}")
@@ -135,29 +140,32 @@ class Mealy:
             ret.add(atom.true)
         return ret
 
-    def react(self, inputs: Atoms) -> Atoms:
+    @property
+    def history(self):
+        return tabulate(self._history, headers=self._headers)
+
+    def react(self, inputs: Atoms | None = None) -> Atoms:
+        curr_state = self.current_state.name
+        if inputs is None:
+            """random choice"""
+            inputs = random.choice(list(self.current_state.transitions.keys()))
         alternatives = self.current_state.transitions[inputs]
         next_state, output = random.choice(list(alternatives))
         object.__setattr__(self, "current_state", next_state)
+        history = list(self._history)
+        history.append([self._curr_step,
+                        str(inputs.str_positive_only),
+                        curr_state, next_state.name,
+                        str(output.str_positive_only)])
+        object.__setattr__(self, "_history", history)
+        object.__setattr__(self, "_curr_step", self._curr_step + 1)
         return output
 
     def reset(self):
         object.__setattr__(self, "current_state", self.initial_state)
-
-    def simulate(self, steps: int = 50, do_print: bool = True):
-        headers = ["t", "inputs", "s", "s'", "outputs"]
-        history: list[list[str]] = []
-
-        for i in range(steps):
-            inputs = random.choice(list(self.current_state.transitions.keys()))
-            curr_state = self.current_state.name
-            outputs = self.react(inputs)
-            next_state = self.current_state.name
-            history.append([i, str(inputs.str_positive_only), curr_state, next_state, str(outputs.str_positive_only)])
-        if do_print:
-            return tabulate(history, headers=headers)
-        else:
-            return history
+        object.__setattr__(self, "_headers", ["t", "inputs", "s", "s'", "outputs"])
+        object.__setattr__(self, "_history", [])
+        object.__setattr__(self, "_curr_step", 0)
 
     def export_to_json(self) -> list[dict[str, Any]]:
         json_content = []

@@ -15,7 +15,6 @@ def example() -> None:
     print("\n")
     c_spec = Controller(guarantees=spec, name="spec")
     print(c_spec.mealy)
-    print(c_spec.mealy.simulate())
 
 
 if __name__ == "__main__":

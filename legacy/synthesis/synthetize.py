@@ -25,7 +25,6 @@ print(controller.mealy)
 c = dump_controller(controller_name=controller_name)
 
 
-print(controller.mealy.simulate(20))
 
 
 

@@ -120,9 +120,10 @@ class Controller:
         return self._spot_automaton
 
     def simulate(self, steps: int = 50):
-        """Simulate a run of 50 steps."""
-
-        return self.mealy.simulate(steps)
+        """Simulate a run of N steps."""
+        for i in range(steps):
+            self.mealy.react()
+        return self.mealy.history
 
     def generate_from_spec(
             self, a: str, g: str, i: str, o: str

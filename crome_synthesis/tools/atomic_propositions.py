@@ -31,8 +31,6 @@ def extract_transitions(
 
     boolean = Bool(formula)
 
-    print(boolean)
-
     for clause in boolean.dnf.clauses:
 
         transition_aps_in: set = set()

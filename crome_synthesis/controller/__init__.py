@@ -70,7 +70,6 @@ class Controller:
     @classmethod
     def from_file(cls, file_path: Path, name: str = ""):
         info = ControllerSpec.from_file(file_path)
-        print(f"Not name ? {not name}")
         if not name:
             with open(file_path, 'r') as ifile:
                 name_found = False
@@ -78,7 +77,6 @@ class Controller:
                     if not line.strip():
                         continue
                     if name_found:
-                        print(f"I'm here ! {line}")
                         name = line.strip()
                         break
                     line, header = _check_header(line)
@@ -87,7 +85,6 @@ class Controller:
                         print(f"HEADER : {line}")
                         if line == "**NAME**":
                             name_found = True
-        print(f"His new name is : {name}")
         return cls(name=name, spec=info)
 
     def __hash__(self):

@@ -13,7 +13,7 @@ from crome_synthesis.controller.controller_info import ControllerSpec, _check_he
 class PControllers:
     name: str = ""
     controllers: set[Controller] = field(default_factory=set)
-
+    spec: ControllerSpec = None
     _synth_time: float = field(init=False, default_factory=float)
 
     def __post_init__(self):

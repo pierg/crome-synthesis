@@ -169,7 +169,6 @@ class Controller:
 
     def __getstate__(self):
         state = self.__dict__.copy()
-        print(state.keys())
         del state["_spot_automaton"]
         return state
 

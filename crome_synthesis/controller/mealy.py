@@ -144,6 +144,10 @@ class Mealy:
     def history(self):
         return tabulate(self._history, headers=self._headers)
 
+    @property
+    def raw_history(self):
+        return self._history
+
     def react(self, inputs: Atoms | None = None) -> Atoms:
         curr_state = self.current_state.name
         if inputs is None:
@@ -154,9 +158,9 @@ class Mealy:
         object.__setattr__(self, "current_state", next_state)
         history = list(self._history)
         history.append([self._curr_step,
-                        str(inputs.str_positive_only),
+                        str(inputs),
                         curr_state, next_state.name,
-                        str(output.str_positive_only)])
+                        str(output)])
         object.__setattr__(self, "_history", history)
         object.__setattr__(self, "_curr_step", self._curr_step + 1)
         return output

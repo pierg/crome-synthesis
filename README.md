@@ -27,7 +27,7 @@ We use
 [conda](https://docs.conda.io/projects/conda/en/latest/user-guide/install/index.html) to
 manage the environment and dependencies.
 
-We use [poetry](https://github.com/python-poetry/poetry) to manage 'development'
+We use [pdm](https://github.com/pdm-project/pdm) to manage 'development'
 dependencies (e.g. linting, type checking).
 
 You need to install `conda-merge` so that we can merge all the dependecies from the
@@ -46,10 +46,10 @@ make conda-install
 make conda-activate
 ```
 
-Install the other dependencies with poetry (optional):
+Install the other dependencies with pdm (optional):
 
 ```bash
-poetry install
+pdm install
 ```
 
 ## Docker

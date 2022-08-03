@@ -1,7 +1,7 @@
-from crome_logic.specification.temporal import LTL
-from crome_logic.typeset import Typeset
+from src.crome_logic.specification.temporal import LTL
+from src.crome_logic.typeset import Typeset
 
-from crome_synthesis.controller import Controller
+from src.crome_synthesis.controller import Controller
 
 
 def example() -> None:

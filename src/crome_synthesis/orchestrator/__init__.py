@@ -1,6 +1,6 @@
 from dataclasses import dataclass, field
 
-from crome_synthesis.controller.mealy import Mealy
+from src.crome_synthesis.controller.mealy import Mealy
 
 
 @dataclass

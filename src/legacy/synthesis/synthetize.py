@@ -2,10 +2,10 @@ import os, sys
 
 from keyring.backends.Windows import Persistence
 
-from crome_synthesis.controller import Controller
+from src.crome_synthesis.controller import Controller
 from pathlib import Path
 
-from crome_synthesis.tools.persistence import dump_controller
+from src.crome_synthesis.tools.persistence import dump_controller
 
 specs_path = Path(os.path.abspath(os.path.dirname(__file__))) / "controller_specs"
 

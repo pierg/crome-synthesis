@@ -2,10 +2,10 @@ import subprocess
 import time
 from typing import Tuple
 
-from crome_logic.specification.string_logic import implies_
+from src.crome_logic.specification.string_logic import implies_
 
-from crome_synthesis.controller.exceptions import SynthesisTimeout, UnknownStrixResponse
-from crome_synthesis.controller.tools import strix_syntax_fix
+from src.crome_synthesis.controller.exceptions import SynthesisTimeout, UnknownStrixResponse
+from src.crome_synthesis.controller.tools import strix_syntax_fix
 
 
 def generate_controller(

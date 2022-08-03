@@ -2,11 +2,11 @@ from dataclasses import dataclass, field
 from functools import reduce
 from pathlib import Path
 
-from crome_logic.specification.temporal import LTL
-from crome_logic.typelement.basic import BooleanUncontrollable, BooleanControllable
-from crome_logic.typeset import Typeset
-from crome_synthesis.controller import Controller
-from crome_synthesis.controller.controller_info import ControllerSpec, _check_header
+from src.crome_logic.specification.temporal import LTL
+from src.crome_logic.typelement.basic import BooleanUncontrollable, BooleanControllable
+from src.crome_logic.typeset import Typeset
+from src.crome_synthesis.controller import Controller
+from src.crome_synthesis.controller.controller_info import ControllerSpec, _check_header
 
 
 @dataclass

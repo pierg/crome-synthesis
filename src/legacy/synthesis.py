@@ -1,11 +1,11 @@
 import spot
-from crome_logic.specification.temporal import LTL
-from crome_logic.tools.crome_io import save_to_file
-from crome_logic.typelement.robotic import BooleanAction, BooleanSensor
-from crome_logic.typeset import Typeset
+from src.crome_logic.specification.temporal import LTL
+from src.crome_logic.tools.crome_io import save_to_file
+from src.crome_logic.typelement.robotic import BooleanAction, BooleanSensor
+from src.crome_logic.typeset import Typeset
 
-from crome_synthesis.controller import Controller
-from crome_synthesis.controller.synthesis import generate_controller
+from src.crome_synthesis.controller import Controller
+from src.crome_synthesis.controller.synthesis import generate_controller
 
 
 def example() -> None:

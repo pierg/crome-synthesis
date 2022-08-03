@@ -4,9 +4,9 @@ from pathlib import Path
 
 import dill as dill
 
-from crome_synthesis.controller import Controller
-from crome_synthesis.pcontrollers import PControllers
-from crome_synthesis.tools import persistence_path
+from src.crome_synthesis.controller import Controller
+from src.crome_synthesis.pcontrollers import PControllers
+from src.crome_synthesis.tools import persistence_path
 
 
 def _make_path(folder_name: Path = ""):

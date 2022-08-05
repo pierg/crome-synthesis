@@ -1,8 +1,8 @@
-from src.crome_logic.specification.boolean import Bool
-from src.crome_logic.tools.string_manipulation import pyeda_syntax_fix
-from src.crome_logic.typelement.basic import Boolean
+from crome_logic.src.crome_logic.specification.boolean import Bool
+from crome_logic.src.crome_logic.tools.string_manipulation import pyeda_syntax_fix
+from crome_logic.src.crome_logic.typelement.basic import Boolean
 
-from src.crome_synthesis.atom import Atoms, AtomValues
+from crome_synthesis.src.crome_synthesis.atom import Atoms, AtomValues
 
 
 def extract_in_out_atomic_propositions(

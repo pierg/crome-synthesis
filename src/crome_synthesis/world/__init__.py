@@ -4,16 +4,16 @@ import uuid
 from copy import copy
 from dataclasses import dataclass, field
 
-from src.crome_logic.specification.temporal import LTL
-from src.crome_logic.typelement import CromeType, TypeKind
-from src.crome_logic.typelement.robotic import (
+from crome_logic.src.crome_logic.specification.temporal import LTL
+from crome_logic.src.crome_logic.typelement import CromeType, TypeKind
+from crome_logic.src.crome_logic.typelement.robotic import (
     BooleanAction,
     BooleanContext,
     BooleanLocation,
     BooleanSensor,
 )
-from src.crome_logic.typeset import Typeset
-from src.crome_synthesis.rule import Rule
+from crome_logic.src.crome_logic.typeset import Typeset
+from crome_synthesis.src.crome_synthesis.rule import Rule
 
 
 @dataclass

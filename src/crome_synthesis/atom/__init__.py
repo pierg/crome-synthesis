@@ -3,8 +3,8 @@ from __future__ import annotations
 from dataclasses import dataclass
 from enum import Enum, auto
 
-from src.crome_logic.typelement import TypeKind
-from src.crome_logic.typelement.basic import Boolean
+from crome_logic.src.crome_logic.typelement import TypeKind
+from crome_logic.src.crome_logic.typelement.basic import Boolean
 
 
 class Val(Enum):

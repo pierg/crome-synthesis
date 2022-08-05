@@ -1,8 +1,8 @@
 import os
 from pathlib import Path
 
-from crome_synthesis.pcontrollers import PControllers
-from crome_synthesis.tools.persistence import dump_mono_controller
+from crome_synthesis.src.crome_synthesis.pcontrollers import PControllers
+from crome_synthesis.src.crome_synthesis.tools.persistence import dump_mono_controller
 
 controller_name = "arbiter"
 spec_path = Path(os.path.abspath(os.path.dirname(__file__))).parent / f"controller_specs/{controller_name}"

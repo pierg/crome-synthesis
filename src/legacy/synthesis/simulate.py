@@ -1,6 +1,6 @@
 import os, sys
 
-from src.crome_synthesis.tools.persistence import load_controller, dump_controller
+from crome_synthesis.src.crome_synthesis.tools.persistence import load_controller, dump_controller
 
 path = os.path.abspath(os.path.dirname(__file__))
 

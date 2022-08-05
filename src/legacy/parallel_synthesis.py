@@ -1,8 +1,8 @@
-from src.crome_logic.specification.temporal import LTL
-from src.crome_logic.typeset import Typeset
+from crome_logic.src.crome_logic.specification.temporal import LTL
+from crome_logic.src.crome_logic.typeset import Typeset
 
-from src.crome_synthesis.controller import Controller
-from src.crome_synthesis.tools.crome_io import save_to_file
+from crome_synthesis.src.crome_synthesis.controller import Controller
+from crome_synthesis.src.crome_synthesis.tools.crome_io import save_to_file
 
 
 def robot() -> None:

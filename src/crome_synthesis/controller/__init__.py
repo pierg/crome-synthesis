@@ -5,16 +5,16 @@ import pydot
 import spot
 from spot import twa
 
-from src.crome_logic.specification.temporal import LTL
-from src.crome_logic.typelement.basic import BooleanUncontrollable, BooleanControllable
-from src.crome_logic.typeset import Typeset
-from src.crome_synthesis.atom import AtomValues
-from src.crome_synthesis.controller.controller_info import ControllerSpec, _check_header
-from src.crome_synthesis.controller.mealy import Mealy
-from src.crome_synthesis.controller.synthesis import generate_controller
-from src.crome_synthesis.tools import output_folder_synthesis
-from src.crome_synthesis.tools.atomic_propositions import extract_in_out_atomic_propositions
-from src.crome_synthesis.tools.crome_io import save_to_file
+from crome_logic.src.crome_logic.specification.temporal import LTL
+from crome_logic.src.crome_logic.typelement.basic import BooleanUncontrollable, BooleanControllable
+from crome_logic.src.crome_logic.typeset import Typeset
+from crome_synthesis.src.crome_synthesis.atom import AtomValues
+from crome_synthesis.src.crome_synthesis.controller.controller_info import ControllerSpec, _check_header
+from crome_synthesis.src.crome_synthesis.controller.mealy import Mealy
+from crome_synthesis.src.crome_synthesis.controller.synthesis import generate_controller
+from crome_synthesis.src.crome_synthesis.tools import output_folder_synthesis
+from crome_synthesis.src.crome_synthesis.tools.atomic_propositions import extract_in_out_atomic_propositions
+from crome_synthesis.src.crome_synthesis.tools.crome_io import save_to_file
 
 
 @dataclass

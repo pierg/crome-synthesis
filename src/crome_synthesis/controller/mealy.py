@@ -7,8 +7,8 @@ from typing import Iterable, Any
 from pydot import Dot
 from tabulate import tabulate
 
-from src.crome_synthesis.atom import Atom, Atoms, AtomValues
-from src.crome_synthesis.tools.atomic_propositions import extract_transitions
+from crome_synthesis.src.crome_synthesis.atom import Atom, Atoms, AtomValues
+from crome_synthesis.src.crome_synthesis.tools.atomic_propositions import extract_transitions
 
 
 @dataclass(frozen=True)

@@ -1,9 +1,9 @@
 import os
 from pathlib import Path
 
-from src.crome_logic.patterns.basic import G
-from src.crome_logic.specification import and_
-from src.crome_synthesis.controller import ControllerSpec, generate_controller
+from crome_logic.src.crome_logic.patterns.basic import G
+from crome_logic.src.crome_logic.specification import and_
+from crome_synthesis.src.crome_synthesis.controller import ControllerSpec, generate_controller
 
 specs_path = Path(os.path.abspath(os.path.dirname(__file__))) / "controller_specs"
 

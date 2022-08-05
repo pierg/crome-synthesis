@@ -2,8 +2,8 @@ import os
 import random
 from pathlib import Path
 
-from src.crome_synthesis.controller import Controller
-from src.crome_synthesis.tools.persistence import load_mono_controller
+from crome_synthesis.src.crome_synthesis.controller import Controller
+from crome_synthesis.src.crome_synthesis.tools.persistence import load_mono_controller
 
 controller_name = "arbiter"
 spec_path = Path(os.path.abspath(os.path.dirname(__file__))).parent / f"controller_specs/{controller_name}"

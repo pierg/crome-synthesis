@@ -1,0 +1,3 @@
+[submodule "crome_logic"]
+	path = crome_logic
+	url = https://github.com/pierg/crome-logic.git
